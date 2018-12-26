@@ -7,3 +7,4 @@
 4. Change the name of IdentityModels.cs to ApplicationUser.cs in order to be the same with it's class.
 5. Enable-Migrations
 6. Change Web.config to point to SQLServer on LND Server to create Database over there.
+7. Add-Migration InitialModel
