@@ -3,3 +3,5 @@
 1. Install 2 extentions: Productivity Power Tools and Web Essentials
 2. Prepare Requirements Document, then extract use cases from it, then extract core usecases
 3. Add 6 use case to Git project: "Add a gig" to 'In progress' column. the other 5 to 'To do' column
+4. Disjoin ApplicationDbContext.cs from IdentityModels in separate class.
+4. Change the name of IdentityModels.cs to ApplicationUser.cs in order to be the same with it's class.
