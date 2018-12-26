@@ -8,3 +8,6 @@
 5. Enable-Migrations
 6. Change Web.config to point to SQLServer on LND Server to create Database over there.
 7. Add-Migration InitialModel
+8. Update-Database
+9. Create Gig.cs and Genre.cs
+
