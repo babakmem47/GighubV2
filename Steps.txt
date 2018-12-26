@@ -10,4 +10,6 @@
 7. Add-Migration InitialModel
 8. Update-Database
 9. Create Gig.cs and Genre.cs
+10. Add Gig and Genre DbSet to ApplicationDbContext in order to add refrence to them.
+11. Add-Migration CreateGigGenreTables
 
