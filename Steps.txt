@@ -12,5 +12,9 @@
 9. Create Gig.cs and Genre.cs
 10. Add Gig and Genre DbSet to ApplicationDbContext in order to add refrence to them.
 11. Add-Migration CreateGigGenreTables And Update-Database
+12. Change Web.config to point to LapTop SQL and Update-Database.
+13. Override Convention (Data Annotations method) to Gig and Genre classes.
+
+
 
 
