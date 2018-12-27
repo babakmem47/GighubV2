@@ -53,4 +53,6 @@
 22. Add DropDownList for Genre in Form + Add property "int Genre" to GigFormViewModel.cs + 
 	Add IEnumerable<Genre> Genres to provide second argument for DropDownList(for source of data :options) +
 	Build project (because change C# code in GigFormViewModel) => Refresh gets error because Genres is empty
-	In Gigs Controller get the list of Genres from the database : 
+	In Gigs Controller get the list of Genres from the database + make blank item selected as default in DrDList.
+
+23. Add bootstrap Button
