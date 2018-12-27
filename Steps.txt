@@ -15,6 +15,7 @@
 12. Change Web.config to point to LapTop SQL and Update-Database.
 13. Override Convention (Data Annotations method) to Gig and Genre classes.
 14. Add-Migration OverrideConventionsForGigsAndGenres + Update-Database.
+15. Add-Migration PopulateGenresTable + Fill Sql to generated migration class + Update-Database.
 
 
 
