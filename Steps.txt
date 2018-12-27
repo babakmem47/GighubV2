@@ -20,6 +20,9 @@
 ////// just purely user interface for adding a gig									   /////////////////
 ////// Create a simple form to allow us to capture a gig	  						   /////////////////
 16. Create Gigs Controller + Change the name of default Action from Index to Create
+17. Create corresponding view (Alt+Enter on View)
+////// Add a link to Navigation bar to this View ////////////
+18. in _Layout.chtml create link 
 
 
 

@@ -4,3 +4,4 @@
 	
 	Clean workspace:     Alt+W, L
 
+	Refresh Browser:	 Ctrl + R
