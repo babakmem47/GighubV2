@@ -1,4 +1,7 @@
 ﻿
+using GighubV2.Models;
+using System.Collections.Generic;
+
 namespace GighubV2.ViewModels
 {
     public class GigFormViewModel
@@ -8,5 +11,9 @@ namespace GighubV2.ViewModels
         public string Date { get; set; }
 
         public string Time { get; set; }
+
+        public int Genre { get; set; }
+
+        public IEnumerable<Genre> Genres { get; set; }
     }
 }
