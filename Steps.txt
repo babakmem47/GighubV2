@@ -66,3 +66,9 @@
 25. @using (Html.BeginForm("Create, "Gigs")) instead of <form>
 
 26. Create HttpPost Action "Create" to Save a gig to the database. We need to change viewmodel to gig object.
+
+////////// Optimization of HttpPost Create Action //////////
+/// the code in this stage is not optimize because we have 3 query of database ///
+/// we can define foreign key for Artist and Genre do avoid unnecessary queries ///
+27. Add ArtistId and GenreId to Gig.cs (make them required instead of its navigation property .
+	
