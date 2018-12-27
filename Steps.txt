@@ -70,5 +70,8 @@
 ////////// Optimization of HttpPost Create Action //////////
 /// the code in this stage is not optimize because we have 3 query of database ///
 /// we can define foreign key for Artist and Genre do avoid unnecessary queries ///
-27. Add ArtistId and GenreId to Gig.cs (make them required instead of its navigation property .
+27. Add ArtistId and GenreId to Gig.cs (make them required instead of its navigation property.
+
+28. Add-Migration AddForeignKeyPropertiesToGig + Update-Database
+
 	

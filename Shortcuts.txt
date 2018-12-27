@@ -10,3 +10,7 @@
 
 	Jump btwn diff Methods of a class : hold down Alt + press Down Arrow
 
+	Go to Definition:	 Ctrl + B
+
+
+
