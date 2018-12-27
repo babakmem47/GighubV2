@@ -1,26 +1,51 @@
 
 
 1. Install 2 extentions: Productivity Power Tools and Web Essentials
+
 2. Prepare Requirements Document, then extract use cases from it, then extract core usecases
+
 3. Add 6 use case to Git project: "Add a gig" to 'In progress' column. the other 5 to 'To do' column
+
 4. Disjoin ApplicationDbContext.cs from IdentityModels in separate class.
-4. Change the name of IdentityModels.cs to ApplicationUser.cs in order to be the same with it's class.
-5. Enable-Migrations
-6. Change Web.config to point to SQLServer on LND Server to create Database over there.
-7. Add-Migration InitialModel
-8. Update-Database
-9. Create Gig.cs and Genre.cs
-10. Add Gig and Genre DbSet to ApplicationDbContext in order to add refrence to them.
-11. Add-Migration CreateGigGenreTables And Update-Database
-12. Change Web.config to point to LapTop SQL and Update-Database.
-13. Override Convention (Data Annotations method) to Gig and Genre classes.
-14. Add-Migration OverrideConventionsForGigsAndGenres + Update-Database.
-15. Add-Migration PopulateGenresTable + Fill Sql to generated migration class + Update-Database.
+
+5. Change the name of IdentityModels.cs to ApplicationUser.cs in order to be the same with it's class.
+
+6. Enable-Migrations
+
+7. Change Web.config to point to SQLServer on LND Server to create Database over there.
+
+8. Add-Migration InitialModel
+
+9. Update-Database
+
+10. Create Gig.cs and Genre.cs
+
+11. Add Gig and Genre DbSet to ApplicationDbContext in order to add refrence to them.
+
+12. Add-Migration CreateGigGenreTables And Update-Database
+
+13. Change Web.config to point to LapTop SQL and Update-Database.
+
+14. Override Convention (Data Annotations method) to Gig and Genre classes.
+
+15. Add-Migration OverrideConventionsForGigsAndGenres + Update-Database.
+
+16. Add-Migration PopulateGenresTable + Fill Sql to generated migration class + Update-Database.
+
 ////// Building a view (not concern about saving data or validation or aesthetics...)  /////////////////
 ////// just purely user interface for adding a gig									   /////////////////
 ////// Create a simple form to allow us to capture a gig	  						   /////////////////
-16. Create Gigs Controller + Change the name of default Action from Index to Create
-17. Create corresponding view (Alt+Enter on View)
+17. Create Gigs Controller + Change the name of default Action from Index to Create
+
+18. Create corresponding view (Alt+Enter on View)
+
 ////// Add a link to Navigation bar to this View ////////////
-18. in _Layout.chtml create link : Add a Gig
-19. Add Bootstrap form to Create.chtml : Add model + Add TextBox for Venue
+19. in _Layout.chtml create link : Add a Gig
+
+20. Add Bootstrap form to Create.chtml : Add model + Add TextBox for Venue
+
+////// Create 2 TextBox for Date and Time in View //////////
+////// We have a problem because in Mode we dont have separate fields for date and time ///////
+21. Create a Folder name ViewModels + Create GigFormViewModel.cs with 3 prop: Venue, Date and Time +
+	Change the model of view from Gig to GigFormViewModel + create 2 TextBoxs for Date and Time + 
+	Build project (because we add new class)
