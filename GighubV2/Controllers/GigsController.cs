@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using GighubV2.Models;
+﻿using GighubV2.Models;
 using GighubV2.ViewModels;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace GighubV2.Controllers
 {
@@ -22,13 +19,14 @@ namespace GighubV2.Controllers
             _context.Dispose();
         }
 
+        [Authorize]
         public ActionResult Create()
         {
             var viewModel = new GigFormViewModel()
             {
                 Genres = _context.Genres.ToList()
             };
-            
+
             return View(viewModel);
         }
     }

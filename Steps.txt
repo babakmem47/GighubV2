@@ -56,3 +56,8 @@
 	In Gigs Controller get the list of Genres from the database + make blank item selected as default in DrDList.
 
 23. Add bootstrap Button
+
+
+////////////////////////////////////// 06. Saving Data /////////////////////////////////////////////////
+///// First We nedd to control aceess to GigForm : only for an authenticated artist ////////////////////
+24. Decorate Create action with [Authorize], Then create a user: artist1 to enable to access "Add a Gig" action. 
