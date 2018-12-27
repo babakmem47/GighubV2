@@ -61,3 +61,6 @@
 ////////////////////////////////////// 06. Saving Data /////////////////////////////////////////////////
 ///// First We nedd to control aceess to GigForm : only for an authenticated artist ////////////////////
 24. Decorate Create action with [Authorize], Then create a user: artist1 to enable to access "Add a Gig" action. 
+
+///// Specify the target in the form for Save button to post info back to controller ///////////////////
+25. @using (Html.BeginForm("Create, "Gigs")) instead of <form>
