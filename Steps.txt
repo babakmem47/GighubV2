@@ -22,10 +22,5 @@
 16. Create Gigs Controller + Change the name of default Action from Index to Create
 17. Create corresponding view (Alt+Enter on View)
 ////// Add a link to Navigation bar to this View ////////////
-18. in _Layout.chtml create link 
-
-
-
-
-
-
+18. in _Layout.chtml create link : Add a Gig
+19. Add Bootstrap form to Create.chtml : Add model + Add TextBox for Venue

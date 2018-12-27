@@ -5,3 +5,5 @@
 	Clean workspace:     Alt+W, L
 
 	Refresh Browser:	 Ctrl + R
+
+	Arrange View HTML:	 Ctrl + k, Ctrl + D
