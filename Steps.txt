@@ -64,3 +64,5 @@
 
 ///// Specify the target in the form for Save button to post info back to controller ///////////////////
 25. @using (Html.BeginForm("Create, "Gigs")) instead of <form>
+
+26. Create HttpPost Action "Create" to Save a gig to the database. We need to change viewmodel to gig object.

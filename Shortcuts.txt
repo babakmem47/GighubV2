@@ -4,6 +4,9 @@
 	
 	Clean workspace:     Alt+W, L
 
-	Refresh Browser:	 Ctrl + R
+	Refresh Browser:	 Ctrl + R     also post form again
 
 	Arrange View HTML:	 Ctrl + k, Ctrl + D
+
+	Jump btwn diff Methods of a class : hold down Alt + press Down Arrow
+
