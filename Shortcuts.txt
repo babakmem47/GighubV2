@@ -16,5 +16,7 @@
 
 	Close a tab:		 Ctrl + F4
 
+	Force Chrome to reload css and js : Ctrl + Shift + R   or Shift + F5
+
 
 

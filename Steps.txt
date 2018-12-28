@@ -130,7 +130,7 @@
 
 
 
-///////////////////////// 07. Preventing Common Web Application Vulnerabilities //////////////////////////////
+///////////////////////// 08. Preventing Common Web Application Vulnerabilities //////////////////////////////
 ////////////// SQL Injection ////////////////////
 /// Allow an attacker to execute malicious SQL statements in your application. : Get the list of all users, delete a record...
 /// var sql = "select * from users where userId = " + userId  => input: "1243 or 1" always true
@@ -158,3 +158,19 @@
 /// The attacker may be able to steals the user's cookie but they won't have access to hidden field because
 /// the only way to get the hidden field is to get the user to visit the trusted page! not the malicious page.
 /// Test: Delete random token(value="random token") and try to post 
+
+
+/////////////////////////////// 09. Moving Towards a Beautiful Design ////////////////////////////////////////
+///// Change the color of navigation bar /////////
+/// R-click on it and inspect: click on its parents(<div class="navbar navbar-inverse navbar-fixed-top">) 
+/// change backgrounf-color="FF4342" and border-color="FF4342" in the right 
+/// Add these changes to our stylesheet: 
+/// copy the right side of inspect, open Site.css, at the end of it add a comment: /* Bootstrap Override */ then paste the css
+
+//////////// Make the links white ////////////////
+/// R-click on one link + inspect: at right .navbar-inverse .navbar-nav : change the color="#FFF" + copy and paste to Site.css
+
+///////// Make 'Application name' white //////////
+/// R-click on one link + inspect: at right .navbar-inverse .navbar-brand : change the color="#FFF" + copy and paste to Site.css
+38. Bootstrap Override: find the proper css with the help of inspect elements and copy and paste it at the end of Site.css and Save.
+/// To force chrome to reaload css and js: CTRL + SHIFT + R
