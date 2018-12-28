@@ -99,3 +99,6 @@
 /// Fix Issue: we need to convert this property to a method => mvc not anymore touch datetime property using reflection
 32. Convert DateTime prop of viewmodel to GetDateTime() method to avoid reflection error.
 
+/// We get another error : Value cannot be null. Parameter name: items for DropDownList in view ///
+/// Reason: Genres is not populated(not initialized)
+33. Populate Genres prop of viewmodel before send it back to view.
