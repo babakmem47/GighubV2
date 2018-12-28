@@ -174,3 +174,19 @@
 /// R-click on one link + inspect: at right .navbar-inverse .navbar-brand : change the color="#FFF" + copy and paste to Site.css
 38. Bootstrap Override: find the proper css with the help of inspect elements and copy and paste it at the end of Site.css and Save.
 /// To force chrome to reaload css and js: CTRL + SHIFT + R
+
+////////////// Choosing a Font ///////////////////
+/// Go to fonts.google.com. Choose Open Sans & Lato & Montserrat => +Select this font. 
+/// In customize select font size regular:400 bold:700
+/// Copy entire embeded line href and open _Layout.chtml and paste it in <Head> just before Render and Save
+/// To compare and feel changes: open Home page on another tab too and do the following change in it:
+/// R-click on any character - Inspect - Computed tab - Find font-family - click to go to definition in css
+/// Notice that we have definition on line 313: bootstrap.css:313
+/// select 'Helvetica Neue' and change it to 'Open Sans' and Enter. Still not feel any changes!
+/// We need to change the Heading fonts also : R-Click on a heading. on the right it is a section for h1 h2 h3 ... h6
+/// Notice that we have definition on line 474: bootstrap.css:474 
+/// select 'Helvetica Neue' and change it to 'Open Sans' and Enter. 
+/// Now we can compare it to old tab!!! specially headings are changed
+/// To change in VS : Open bootstrap.css Search for 'Helv'. copy h1,h2,... to Site.css. Add Lato in front of another fonts
+/// Insert 'body,' at the beginnig of block. Delete 'line-height' and 'color' lines. Delete unwanted font from <link href=...>
+39. Add <link href...> for wanted font in <head> in _Layout.chtml. Copy related css from bootstrap and paste in in Site.css
