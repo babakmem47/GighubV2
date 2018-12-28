@@ -1,5 +1,6 @@
 ﻿
 using GighubV2.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GighubV2.ViewModels
@@ -15,5 +16,11 @@ namespace GighubV2.ViewModels
         public int Genre { get; set; }
 
         public IEnumerable<Genre> Genres { get; set; }
+
+        public DateTime DateTime
+        {
+            get { return DateTime.Parse(string.Format("{0} {1}", Date, Time)); }
+
+        }
     }
 }
