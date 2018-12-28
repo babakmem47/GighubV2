@@ -74,4 +74,8 @@
 
 28. Add-Migration AddForeignKeyPropertiesToGig + Update-Database
 	in gig object: replace Artist with ArtistId and Genre with GenreId
+
+29. Remove 2 unnecessary queries from HttpPost Create Action and refactoring code.
+
+
 	

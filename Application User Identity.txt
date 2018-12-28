@@ -1,0 +1,7 @@
+
+
+/// Get current user ///
+	string currentUserId = User.Identity.GetUserId();
+	ApplicationUser currentUser = _context.Users.FirstOrDefault(u => u.Id == currentUserId);
+
+/// 

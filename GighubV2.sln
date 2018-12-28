@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GighubV2", "GighubV2\Gighub
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{011F70E7-05D3-4B7D-8433-24E58DEBA152}"
 	ProjectSection(SolutionItems) = preProject
+		Application User Identity.txt = Application User Identity.txt
+		Entity Framework.txt = Entity Framework.txt
 		Fluent Api.txt = Fluent Api.txt
 		Shortcuts.txt = Shortcuts.txt
 		Steps.txt = Steps.txt

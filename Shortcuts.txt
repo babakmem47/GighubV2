@@ -12,5 +12,7 @@
 
 	Go to Definition:	 Ctrl + B
 
+	Refactor Code		 Ctrl + Shift + R :			Inline variable : combine two lines of code into one to avoid "extra variable"
+
 
 

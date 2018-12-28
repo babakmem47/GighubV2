@@ -1,0 +1,11 @@
+
+/// Fill navigation property (Genre) of Gigs Table when form in view post viewmodel to httppost action ///
+/// in HttpPost Action(viewModel as receiving parameter): 
+	var genre = _context.Genres.Single(g => g.Id == viewModel.Genre);
+	var gig = new Gig 
+	{
+		...
+		Genre = genre	
+	};
+
+

@@ -36,14 +36,9 @@ namespace GighubV2.Controllers
         [HttpPost]
         public ActionResult Create(GigFormViewModel viewModel)
         {
-            //string currentUserId = User.Identity.GetUserId();
-            //ApplicationUser currentUser = _context.Users.Single(u => u.Id == currentUserId);
-            var artistId = User.Identity.GetUserId();
-            var artist = _context.Users.Single(u => u.Id == artistId);
-            var genre = _context.Genres.Single(g => g.Id == viewModel.Genre);
             var gig = new Gig
             {
-                ArtistId = artistId,
+                ArtistId = User.Identity.GetUserId(),
                 DateTime = DateTime.Parse(string.Format("{0} {1}", viewModel.Date, viewModel.Time)),
                 Venue = viewModel.Venue,
                 GenreId = viewModel.Genre
