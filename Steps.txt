@@ -110,3 +110,6 @@
 /// At FutureDate.cs perform Date validation and return the result
 34. Add FutureDate.cs & override IsValid method in it & decorate Date prop of viewmodel to [FutureDate]
 
+35. Add ValidTime.cs & override IsValid method in it & decorate Time prop of viewmodel to [ValidTime]
+
+
