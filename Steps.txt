@@ -89,7 +89,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////// 07. Implementing Validation /////////////////////////////////////
-/// Server Side Validation ///
+/////////////////////////// Server Side Validation ///////////////////////////////////////
 31. 1. Make view model prop required. 2. Add placeholder in view for validation messages 3. Modify Controller: ModelState.IsValid
 
 /// We get an error when not filling textboxes : String was not recognized as a valid DateTime
@@ -102,3 +102,11 @@
 /// We get another error : Value cannot be null. Parameter name: items for DropDownList in view ///
 /// Reason: Genres is not populated(not initialized)
 33. Populate Genres prop of viewmodel before send it back to view.
+
+/////// Implementing Custom Validation for Date and Time (Server Side) ////////
+/// Add FutureDate.cs that derive from ValidationAttribute. Add Override IsValid method in it. 
+/// Decorate Date prop of viewmodel to [FutureDate] 
+/// => at runtime, value parameter in IsValid method in FutureDate would be a value of Date prop in viewmodel
+/// At FutureDate.cs perform Date validation and return the result
+34. Add FutureDate.cs & override IsValid method in it & decorate Date prop of viewmodel to [FutureDate]
+
