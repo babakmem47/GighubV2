@@ -92,4 +92,10 @@
 /// Server Side Validation ///
 31. 1. Make view model prop required. 2. Add placeholder in view for validation messages 3. Modify Controller: ModelState.IsValid
 
+/// We get an error when not filling textboxes : String was not recognized as a valid DateTime
+/// in line 27: get { return DateTime.Parse(string.Format("{0} {1}", Date, Time)); }
+/// technically we should not have get this error because apparently it should not reach the line of code for referencing Date and Time.
+/// Reason: because mvc use its "reflection" to construct a viewmodel. So its going to touch all prop of viewmodel.
+/// Fix Issue: we need to convert this property to a method => mvc not anymore touch datetime property using reflection
+32. Convert DateTime prop of viewmodel to GetDateTime() method to avoid reflection error.
 
