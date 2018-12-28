@@ -112,4 +112,22 @@
 
 35. Add ValidTime.cs & override IsValid method in it & decorate Time prop of viewmodel to [ValidTime]
 
+/////////////////////// Client Side Validation ///////////////////////////////////////////
+/// To check if it is enable -> Inspect - Network tab - click Save : We can see the post request "Create" send to Server
+/// Reason : we have not enabled client side validation!
+/////// Enabling Client Side Validation /////////
+/// There are 2 js files that are responsible for validation in jquery: jquery.validate.js and jquery.validate.unobtrusive.js
+/// Microsoft put these 2 files in separate bundle to return them to only pages where we need them.
+/// Idea of Bundle : we can get one or more js/css files, put them in a bundle and then at runtime 
+/// asp.net will combine them and compress them before returning to the client(for optimization)
+/// We do not need to sent them to every request from client. So we need to add jqueryval bundle to our Create.chtml
+/// @RenderSection in _Layout.chtml : use for adding additional scripts to a page. So in that section we add jquery validation.
+36. Add @section scripts with jqueryval bundle to Create view for client side validation.
+
+// The reason we need section scripts in view : to ensure that the jqueryval bundle comes after jquery definition.
+// at this point both jquery and bootstrap are downloaded
+// Fresh Download of page from server : add ? at the end of url - Clear all request in Network tab then Save.
+
+
+
 
