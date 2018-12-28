@@ -130,4 +130,25 @@
 
 
 
+///////////////////////// 07. Preventing Common Web Application Vulnerabilities //////////////////////////////
+////////////// SQL Injection ////////////////////
+/// Allow an attacker to execute malicious SQL statements in your application. : Get the list of all users, delete a record...
+/// var sql = "select * from users where userId = " + userId  => input: "1243 or 1" always true
+/// change sql = "select * from users where userId = @userId"
+/// in out application we dont have this vulnerability because we are not generating sql at runtime => let EF generate sql statements
+/// DANGEROUS: _context.Gigs.SqlQuery("select * ...", input)
+
+///////// Cross-site Scripting (XSS)//////////////
+/// Enable an attacker to execute malicious script on the victim's computer : they steal the user's cookies and highjack session
+/// They can also access to user's Geo-Location, Webcam, File System and ...
+/// Attacker insert malicious js into the pages of trusted website.
+/// Prevent : 1. Escaping content: tell browser to treat the content as a simple string and not interprete at any other way.
+/// <script> --> Escape: &lt;script&gt;
+/// in out application we dont have this vulnerability because MVC rejects js in the input fileds of the form.
+/// also Razor view automatically escape content.	Exception: Html.Raw()
+
+//////// Cross-site Request Forgery (CSRF)////////
+/// Allow an attacker to perfor actions on behalf of a user without their knowledge.
+/// Prevent: use @Html.AntiForgeryToken() in view and decorate [ValidateAntiForgeryToken] in Controller
+37. Add @Html.AntiForgeryToken() in Create.chtml and decorate Create action with [ValidateAntiForgeryToken]
 
