@@ -152,3 +152,9 @@
 /// Prevent: use @Html.AntiForgeryToken() in view and decorate [ValidateAntiForgeryToken] in Controller
 37. Add @Html.AntiForgeryToken() in Create.chtml and decorate Create action with [ValidateAntiForgeryToken]
 
+/// inspect - Elements - in Form : <input ...type="hidden" value="Random Token" ...>  This is the first part(Generate hidden field)
+/// Second part: Its also created a cookie that includes the encripted version of this token:  
+/// to see this encrypted token: in inspect go to Application - Cookies - __RequestVerificationToken
+/// The attacker may be able to steals the user's cookie but they won't have access to hidden field because
+/// the only way to get the hidden field is to get the user to visit the trusted page! not the malicious page.
+/// Test: Delete random token(value="random token") and try to post 
