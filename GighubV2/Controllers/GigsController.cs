@@ -43,10 +43,10 @@ namespace GighubV2.Controllers
             var genre = _context.Genres.Single(g => g.Id == viewModel.Genre);
             var gig = new Gig
             {
-                Artist = artist,
+                ArtistId = artistId,
                 DateTime = DateTime.Parse(string.Format("{0} {1}", viewModel.Date, viewModel.Time)),
                 Venue = viewModel.Venue,
-                Genre = genre
+                GenreId = viewModel.Genre
             };
             _context.Gigs.Add(gig);
             _context.SaveChanges();

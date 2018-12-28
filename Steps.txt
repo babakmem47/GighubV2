@@ -46,7 +46,7 @@
 
 ////// Create 2 TextBox for Date and Time in View //////////
 ////// We have a problem because in Mode we dont have separate fields for date and time ///////
-21. Create a Folder name ViewModels + Create GigFormViewModel.cs with 3 prop: Venue, Date and Time +
+21. Create a Folder name ViewModels + Create GigFormViewModel.cs with 3 prop: Venue, Date and Time +ge
 	Change the model of view from Gig to GigFormViewModel + create 2 TextBoxs for Date and Time + 
 	Build project (because we add new class)
 
@@ -73,5 +73,5 @@
 27. Add ArtistId and GenreId to Gig.cs (make them required instead of its navigation property.
 
 28. Add-Migration AddForeignKeyPropertiesToGig + Update-Database
-
+	in gig object: replace Artist with ArtistId and Genre with GenreId
 	
