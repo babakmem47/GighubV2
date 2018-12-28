@@ -14,5 +14,7 @@
 
 	Refactor Code		 Ctrl + Shift + R :			Inline variable : combine two lines of code into one to avoid "extra variable"
 
+	Close a tab:		 Ctrl + F4
+
 
 

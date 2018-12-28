@@ -62,14 +62,15 @@
 ///// First We nedd to control aceess to GigForm : only for an authenticated artist ////////////////////
 24. Decorate Create action with [Authorize], Then create a user: artist1 to enable to access "Add a Gig" action. 
 
-///// Specify the target in the form for Save button to post info back to controller ///////////////////
+///// Specify the target in the form for Save button to post info back to controller /////
 25. @using (Html.BeginForm("Create, "Gigs")) instead of <form>
 
 26. Create HttpPost Action "Create" to Save a gig to the database. We need to change viewmodel to gig object.
 
-//////////////////// Optimization of HttpPost Create Action //////////////////////////////////
-/// the code in this stage is not optimize because we have 3 query of database ///
-/// we can define foreign key for Artist and Genre do avoid unnecessary queries ///
+//////////////////// Optimization of HttpPost Create Action //////////////////////////////
+/// the code in this stage is not optimize because we have 3 query of database 
+/// we can define foreign key for Artist and Genre do avoid unnecessary queries 
+/// benefit of Foreign KEy: they save us from unnecessary queries to load related objects. 
 27. Add ArtistId and GenreId to Gig.cs (make them required instead of its navigation property.
 
 28. Add-Migration AddForeignKeyPropertiesToGig + Update-Database
@@ -77,11 +78,18 @@
 
 29. Remove 2 unnecessary queries from HttpPost Create Action and refactoring code.
 
-/////////////// Separation of concern : Responsibility of Controller and View ////////////////
+/////////////// Separation of concern : Responsibility of Controller and View ////////////
 /// Controller not responsible for parsing string value into DateTime object.  
 /// Controller shoud act as a coordinator for application logic: WHAT SHOULD HAPPEN NEXT! 
 /// Controller is like a manager. Not do the actual work. 
-/// Information Expert: Class/Object that has the information to do sth, should be the one  
+/// Information Expert Pronciple: Class/Object that has the information to do sth, should be the one  
 /// that will carry that responsibility. So the viewModel is the class that knows about Date and Time!
-29. Transfer the parsing Date and Time task from Controller to ViewModel class.
+30. Transfer the parsing Date and Time task from Controller to ViewModel class.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////// 07. Implementing Validation /////////////////////////////////////
+/// Server Side Validation ///
+31. 1. Make view model prop required. 2. Add placeholder in view for validation messages 3. Modify Controller: ModelState.IsValid
+
 
