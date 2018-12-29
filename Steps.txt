@@ -216,3 +216,15 @@
 ///////// Improve the look of Button /////////////
 /// .btn { font-size: 17px; padding: 7px 20px; border-radius: 9px;}
 40. Increase DIV margin, Font size and shape and roundness of elements in form
+
+//// Dissapearing Inputs Hover/Shadow Effect /////
+/// R-Click on a TextBox. in the right : click on :hov(Toggle element state) -> tick :focus -> .form-control:focus { } appears!
+/// Untick webkit-box-shadow: and box-shadow:
+/// .form-control:focus { webkit-box-shadow: none; box-shadow: none; }
+
+////// Change border color of Inputs focus ///////
+.form-control:focus { border-color:} -> click on rectangle color icon -> pick a color! -> border-color:#2196f3 for example
+/// .form-control:focus { border-color: #2196f3 }
+
+41. Override focus style (remove shadow arount inputs and change border color) and put it after .form-control in Site.css
+
