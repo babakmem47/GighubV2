@@ -240,3 +240,14 @@
 //// Dissapearing Shadow around DropDownList /////
 /// Select <ul class="dropdown-menu"...</ul> : on the right untick webkit-box-shadow: and box-shadow
 /// Add css .dropdown-menu {  } to Site.css
+
+///// Change triangle on the right of DropDown gray -> white /////
+/// R-Click on a little triangle. on the right > a .caret { border-top-color: #fff; border-bottom-color: #fff; }  => add css to Site.css
+43. Change css of DropDownList: change bg-color, remove shadow and change triangle color
+
+/// Rename 'Application name' to Gighub and remove Home in _Layout.schtml
+
+/// Make difference between 'Gighub' and 'Add a Gig'. make 'Gighub' stand out ////
+/// Notice that Gighub is in the <a class=navbar-brand...
+/// R-Click on a 'Gighub'. in the right : .navbar-brand {} add font-weight:700;
+44. Change Application name to Gighub and make it bolder
