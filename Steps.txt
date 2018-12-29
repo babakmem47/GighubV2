@@ -231,3 +231,12 @@
 ////////////// Adding a DropDownList to NavBar ///////////////////
 /// Copy NavBar right DropDown pattern from bootstrp and paste it in _LoginPartial.cshtml inside form: class ="navbar-right"
 42. Adding a DropDownList to NavBar
+
+//// Change black background color of DropDownList in NavBar /////
+/// R-Click on a DropDownList. in the right :  click on rectangle to pick color (color picker) -> go to navbar to choose desired color.
+/// We can pick darker bg-color and then play with opacity to make it blend with a bg a little bit more!
+/// copy the style and paste it in site.css beside other css for NavBar.
+
+//// Dissapearing Shadow around DropDownList /////
+/// Select <ul class="dropdown-menu"...</ul> : on the right untick webkit-box-shadow: and box-shadow
+/// Add css .dropdown-menu {  } to Site.css
