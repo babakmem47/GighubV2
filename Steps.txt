@@ -190,3 +190,29 @@
 /// To change in VS : Open bootstrap.css Search for 'Helv'. copy h1,h2,... to Site.css. Add Lato in front of another fonts
 /// Insert 'body,' at the beginnig of block. Delete 'line-height' and 'color' lines. Delete unwanted font from <link href=...>
 39. Add <link href...> for wanted font in <head> in _Layout.chtml. Copy related css from bootstrap and paste in in Site.css
+
+//////// Increase the margin of DIV //////////////
+/// R-Click on a lable. Hold the mouse pointer on <div class="form-group"> : Blue area is div and yellow area is the margin
+/// With the <div class="form-group" selected : on the right side we can change 'margin-bottom' with arrow key up and down.
+/// Increase it to 20px. Copy the block of css and paste at the end of Site.css
+
+/////// Increase the Font Size of NavBar /////////
+/// R-Click on a text in page. Go to Computed -> font-size -> go to definition -> increase to 17px;
+/// Create body { font-size: 17px;} above h1,h2,h3... in Site.css
+
+/////// Increase the font size inside inputs /////
+/// R-Click on a text inside an input. in the right side in form-control, find font-size and increase it to 17px;. Or
+/// instead we can Go to Computed -> font-size -> go to definition -> increase to 17px;
+/// Create .form-control { font-size: 17px;} at the bottom of Site.css
+
+//////// Increase Padding/Size of TextBoxes //////
+/// Out TextBoxes are too small. We want more chunky TextBox
+/// R-Click on a TextBox. in the right side in form-control, find padding and increase it to 20px; 15px;
+/// add 'padding: 20px 15px;' in .form-control block that we already created in Site.css
+
+/////// Add more Roundness to the TextBoxes //////
+/// add 'border-radius: 9px;' in .form-control block that we already created in Site.css
+
+///////// Improve the look of Button /////////////
+/// .btn { font-size: 17px; padding: 7px 20px; border-radius: 9px;}
+40. Increase DIV margin, Font size and shape and roundness of elements in form

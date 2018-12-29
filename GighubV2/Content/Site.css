@@ -37,6 +37,9 @@ textarea {
     color: #FFF;
 }
 
+body {
+    font-size: 17px;
+}
 /* Font */
 body,
 h1,
@@ -52,4 +55,24 @@ h6,
 .h5,
 .h6 {
     font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+/* DIV margin and padding */
+.form-group {
+    margin-bottom: 20px;
+} 
+
+.form-control {
+    font-size: 17px;
+    padding: 20px 15px;
+    -ms-border-radius: 9px;
+    border-radius: 9px;
+}
+
+.btn {
+    font-size: 17px;
+    padding: 7px 20px;
+    -ms-border-radius: 9px;
+    border-radius: 9px;
 }
