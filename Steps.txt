@@ -228,3 +228,6 @@
 
 41. Override focus style (remove shadow arount inputs and change border color) and put it after .form-control in Site.css
 
+////////////// Adding a DropDownList to NavBar ///////////////////
+/// Copy NavBar right DropDown pattern from bootstrp and paste it in _LoginPartial.cshtml inside form: class ="navbar-right"
+42. Adding a DropDownList to NavBar
