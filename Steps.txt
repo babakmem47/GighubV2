@@ -271,3 +271,18 @@
 ////////// Add Watermark on the Date and Time Fields //////////////
 /// Add placeholder to Date and Time: @Html.TextBoxFor(m => m.Date, new { @class = "form-control", placeholder = "eg 1 Jan 2019" })
 45. Add 'All Fields are required' lable of top of form + Put focus on the first field + Add watermark to Date and Time fields.
+
+/// Action: each form shoul have a primary action. It's bettter to avoud secondary action. Change 'Cancel' button bg-color to white or make it a link
+/// Primary action should stand out. Align primary action with input fields. 
+
+/////////////////////////////////////// Validation //////////////////////////////////////////////
+/// Provide clear and concise validation messages for users. Use red to indicate errors and green to indicate successfull messages. 
+/// Provide smart defaults: Detect location using Ip Address or Html5 Location Api to fill the location textbox.
+/// Or calculate the value in some fields based on the value in other field, Go ahead and do that for users.
+
+//////// Make Validation Messages Red ////////////////
+/// R-Click on a validation error: in the right : click its parent: <span class="field-validation-error".. 
+/// -> click on + icon : add color: red; font-weight: bold; -> copy css(span.field-vali...) and paste it in Site.css
+/// because class="field-validation-error" is not bootstrap class and It's part of MVC,  we define it on top section of Site.css
+/// For the border of Textbox to be red when validation error occur : .input-validation-error { border: 2px solid red; }
+46. make validation error messages red and also the border of Textboxes include invalid value.
