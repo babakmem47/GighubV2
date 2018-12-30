@@ -27,7 +27,7 @@ namespace GighubV2.Controllers
             {
                 Genres = _context.Genres.ToList()
             };
-
+            
             return View(viewModel);
         }
 

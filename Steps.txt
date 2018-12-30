@@ -291,4 +291,12 @@
 /////// Fill Home page with the list of upcomig Gigs ///////////
 /// Read from database all upcoming gigs and show it in /home/index
 /// Be Careful: Not define _context readonly!
+/// In Index Action of Home Controller, read all gigs from database using Include (for reading artist too). Send list to Index View.
 47. Show all upcoming gigs (DateTime and ArtistUsername) at home page.
+
+///////////////// Add Name property to Our User ////////////////
+/// IdentityUser class does not have the Name property. We need to manually add it.
+/// Open ApplicationUser.cs -> Add public string Name at the beginning and decorate it as [Required] and [StringLength(100)]
+/// Add-Migration AddNameToApplicationUser : because we have extended our domain-model + Update-Database
+/// In View display Name of the artist instead of UserName : @gig.Artist.Name + Build
+48. Add Name prop to AspNetUser class + Add-Migration + Update-Database
