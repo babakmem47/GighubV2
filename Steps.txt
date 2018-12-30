@@ -286,3 +286,9 @@
 /// because class="field-validation-error" is not bootstrap class and It's part of MVC,  we define it on top section of Site.css
 /// For the border of Textbox to be red when validation error occur : .input-validation-error { border: 2px solid red; }
 46. make validation error messages red and also the border of Textboxes include invalid value.
+
+////////////////////////////////////////////// 11. Extending ASP.NET Identity Users//////////////////////////////////////////////////////////
+/////// Fill Home page with the list of upcomig Gigs ///////////
+/// Read from database all upcoming gigs and show it in /home/index
+/// Be Careful: Not define _context readonly!
+47. Show all upcoming gigs (DateTime and ArtistUsername) at home page.

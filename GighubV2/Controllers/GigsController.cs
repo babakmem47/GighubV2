@@ -8,7 +8,7 @@ namespace GighubV2.Controllers
 {
     public class GigsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private ApplicationDbContext _context;
 
         public GigsController()
         {
