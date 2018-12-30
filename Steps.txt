@@ -245,9 +245,29 @@
 /// R-Click on a little triangle. on the right > a .caret { border-top-color: #fff; border-bottom-color: #fff; }  => add css to Site.css
 43. Change css of DropDownList: change bg-color, remove shadow and change triangle color
 
-/// Rename 'Application name' to Gighub and remove Home in _Layout.schtml
+/// Rename 'Application name' to Gighub and remove Home in _Layout.cshtml
 
 /// Make difference between 'Gighub' and 'Add a Gig'. make 'Gighub' stand out ////
 /// Notice that Gighub is in the <a class=navbar-brand...
 /// R-Click on a 'Gighub'. in the right : .navbar-brand {} add font-weight:700;
 44. Change Application name to Gighub and make it bolder
+
+///////////////////////////////////////////////// 10. Usability Best Practices /////////////////////////////////////////////////////////////
+/// Some Key Principles of Usability :
+/// Lables: Keep them short, Be consice, Dont use ambiguous words. Use Top Align in forms (or right align) 
+/// Fields: Reduce the number, See if you can remove optional fields or separate them from mandatory fields.
+/// If you have many fields, Group related fields tha logically make sense. if that is not sufficient, break the entire form into Wizard.
+/// Specify the format for field such as Date, Time, Ip,... : Add watermark
+/// Set the focus on the first field in the form: save the user from one extra click!
+
+/////////// Tell the user all the fields are mandatory ////////////
+/// One practise: put asterisc (*) or lable like required next to those required fields.
+///// Add a lable on top of the form that tells all fields are required. /////
+///<p class="alert alert-info"><strong>All Fields are required</strong></p>
+
+///////// Put the Focus on the First Field of Form ////////////////
+/// use autofocus in : @Html.TextBoxFor(m => m.Venue, new { @class = "form-control" , autofocus = "autofocus" })
+
+////////// Add Watermark on the Date and Time Fields //////////////
+/// Add placeholder to Date and Time: @Html.TextBoxFor(m => m.Date, new { @class = "form-control", placeholder = "eg 1 Jan 2019" })
+45. Add 'All Fields are required' lable of top of form + Put focus on the first field + Add watermark to Date and Time fields.
