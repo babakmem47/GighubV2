@@ -287,6 +287,7 @@
 /// For the border of Textbox to be red when validation error occur : .input-validation-error { border: 2px solid red; }
 46. make validation error messages red and also the border of Textboxes include invalid value.
 
+
 ////////////////////////////////////////////// 11. Extending ASP.NET Identity Users//////////////////////////////////////////////////////////
 /////// Fill Home page with the list of upcomig Gigs ///////////
 /// Read from database all upcoming gigs and show it in /home/index
@@ -300,3 +301,13 @@
 /// Add-Migration AddNameToApplicationUser : because we have extended our domain-model + Update-Database
 /// In View display Name of the artist instead of UserName : @gig.Artist.Name + Build
 48. Add Name prop to AspNetUser class + Add-Migration + Update-Database
+
+///////// Modify Signup form to capture Artist's Name //////////
+/// Open Register.cshtml. Copy one of div block and paste it at the beginnig of form.
+/// Create Name prop in RegisterViewModel and decorate [Required] and [StringLength(100)]
+/// AccountController -> Register Action -> Initialize Name in new ApplicationUser instance(user)
+
+///////////// Cleanup AccountViewModel: Move Files//////////////
+/// Separate RegisterViewModel with Alt + Enter -> put the cursor on the class name(RegisterViewModel) and activate Refactoring Commands(Ctrl+Shift+R)
+/// Select second option(Move To Folder... select GighubV2\ViewModel) and Next
+49.  Disjoin classes in AccountViewModel and move them into ViewModel folder
