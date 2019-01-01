@@ -333,3 +333,18 @@
 /// .gigs > li .details { position: absolute; top: 0; left: 100px; }
 /// remove bullet points: .gigs { list-style: none; }
 51. Move Artist/Genre to the right of Date/Time and remove list bullet point.
+
+///////// Build a Calendar icon /////////
+/// Put Browser and VS side by side: Open Browser => Win + -> => Open VS => Win + <-
+/// Make bg-color of Date red and color of the text white and align text to center
+/// if not set 'width', it set to 100% and it is bad!
+/// Set width= 60px;
+/// Make text of Date and Month Uppercase :  .gig > li .date .month { text-transform: uppercase; }
+/// Make text of Date and Month a little smaller (16px;) and bold: font-size: 14px;  font-weight: bold;
+/// add space between date and surrounding area : padding : 2px 6px;
+/// ser bg-color of Day to gray and text color dark. Make font a little bigger: 20px; add more padding to day.
+/// Make corners of a Date container round:		border-radius: 8px;
+/// Make artist name bold and put the genre on the next line. .gigs > li .details .artist { font-weight: bold; display: block;}
+/// Make Genre a little smaller
+/// add space betwwen top of page and first item of list(first gig) : on the very top of Site.css set padding-top to 90px;
+52. add css to day/month/artist/genre
