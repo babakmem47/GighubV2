@@ -125,3 +125,19 @@ select.form-control {
 /*.field-validation-error {*/
 /*    color: red;*/
 /*}*/
+
+/* Page-Level Styles */
+.gigs {
+    list-style: none;
+}
+
+.gigs > li {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.gigs > li .details {
+    position: absolute;
+    top: 0;
+    left: 100px;
+}

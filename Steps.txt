@@ -322,3 +322,14 @@
 /// in HomeController: eager load Genre too. 
 50. List gigs (Month/date Artist/Genre) in home page with ZenCoding. 
 
+/// Relative and Absolute positioning in css:
+/// An element with 'relative position' allow us to 'absolutely' position its children.
+/// We want to move details to the right of date => set the position of 'details' to absolute and it's parent(<li>) to relative.
+/// First we need to give <ul> (at the top of view) a class to be able to identify this element and it's children in css.
+/// <ul class="gigs">
+/// at the end of Site.css add new comment for new part: /* Page-Level Styles */
+/// Site.css: .gigs > li : > means li that immediately below gigs element.
+/// .gigs > li { position : relative;  margin-bottom: 30px; }
+/// .gigs > li .details { position: absolute; top: 0; left: 100px; }
+/// remove bullet points: .gigs { list-style: none; }
+51. Move Artist/Genre to the right of Date/Time and remove list bullet point.
