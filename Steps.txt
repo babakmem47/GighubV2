@@ -311,3 +311,14 @@
 /// Separate RegisterViewModel with Alt + Enter -> put the cursor on the class name(RegisterViewModel) and activate Refactoring Commands(Ctrl+Shift+R)
 /// Select second option(Move To Folder... select GighubV2\ViewModel) and Next
 49.  Disjoin classes in AccountViewModel and move them into ViewModel folder
+
+
+///////////////////////////////////// 12. Creating-Beautiful-and-Precise-Designs-with-CSS ///////////////////////////////////////////////////
+/// List gigs in Home page in specific style
+/// Zen Coding: comes with Web Essentials plugin
+/// (div.date>div.month+div.day)+(div.details>span.artist+span.genre): put the cursor at the end of the line and press tab!
+/// to display only Date: DateTime.ToString("d ") => put space after 'd'
+/// Personal preference: use 'div' when want to create a layout and use 'span' when want to add style to some text
+/// in HomeController: eager load Genre too. 
+50. List gigs (Month/date Artist/Genre) in home page with ZenCoding. 
+

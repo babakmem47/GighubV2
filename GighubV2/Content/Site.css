@@ -95,6 +95,14 @@ h6,
     padding: 20px 15px;
     -ms-border-radius: 9px;
     border-radius: 9px;
+    
+   
+}
+
+select.form-control {
+    padding: 0 15px;
+    height: 40px;
+/*    text-indent: 16px;*/
 }
 
 .form-control:focus {
