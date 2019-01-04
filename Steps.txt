@@ -372,3 +372,19 @@
 /// Of course we can add nav-prop in ApplicationUser for Gig but we also can leave it empty.
 /// Re-Generate Migration : -Force + Update-Database
 53. Add Attendace.cs(many-to-many relation btw User & Gig) to represent 'add a Gig to Calendar' info. Remove CascadeDelete with Gig.
+
+/////// Add Button at the right bottom of each Gig ////////
+/// When user click on btn, bg-color of btn change from white to blue and also add corresponding gig to the calendar.
+/// To implement this, we are gonna use Ajax becasue we dont want to a full page reload. So on the server we create a lightweight API.
+/// Create /api/attendances with HTTPPOST is more common. We'll need to include some data in the request body : gigId, Not UserId!
+/// the UserId (id of currently loged in user) should be calculated on the server.
+
+/////// Building the API /////////
+/// R-click on 'Controllers' -> Add Controller... -> Add Web API 2 controller-Empty -> name it: AttendancesController
+/// Copy the last line of 'readme.txt' and put it in Global.asax(at the begining of Application_Start method) -> Save 
+/// So in Attendances Controller we need to recieve an id from view, create a new attendance obj, add it to the context and save changes.
+/// We need to use [Authorize] for this controller because we get user id in action of this controller.
+/// this is very basic implementation: Not checking duplicate, not error handling.
+/// Asp.net WebApi by default does not look for scalar parameter like an integer in the request body. It expects them to be in the URL
+/// So we decorate int parameter to [FromBody] attribute to tell web api to receive it from the body of request
+/// Build + test with postman

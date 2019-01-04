@@ -14,10 +14,13 @@
 
 	Refactor Code:				Ctrl + Shift + R :			Inline variable : combine two lines of code into one to avoid "extra variable"  +  Move Files into different folder (put cursor on the name of the class)
 
-	Close a tab:				Ctrl + F4
+	Close a tab:				Ctrl + F4    also  Shift + Esc
 
 	Reload css and js:			Ctrl + Shift + R  or Shift + F5	=>	(Force Chrome to reload css & js)
 
 	Surround with tag:			Ctrl + Alt + j			> select a text, then use this to surround it with a tag or a link ...
 
 	Lookup member of Class:		Ctrl + F12
+
+	Close a tab:				Shift + Esc
+
