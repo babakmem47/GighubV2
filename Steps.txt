@@ -348,3 +348,27 @@
 /// Make Genre a little smaller
 /// add space betwwen top of page and first item of list(first gig) : on the very top of Site.css set padding-top to 90px;
 52. add css to day/month/artist/genre
+
+///////////////////////////////////// 13. Implementing a Use Case from Top to Bottom ///////////////////////////////////////////////////
+///////// Add a Gig to the Calendar //////////
+/// When building Software, Do not attempt to model the universe!  Gig Calendar Month Day GoogleCal iCal ...
+/// Pay attention to only create enought of the model to solve the problem at hand.
+/// The problem: Keeping track of the gigs the user  might be attending.
+/// Solution : simple association btw User and Gig => many to many relationship
+/// We need 3rd table name Attendance but we add this manually: becasue we need to query that directry
+/// Add Attendance.cs to project  ApplicstionUser Attendee, string AttendeeId, Gig Gid, int GigId
+/// We need a composite primary key (AttendeeId, GigId) : decorate both with [Key]
+/// Specify order for primary key : decorate both with [Column(Order = 1)], [Column(Order = 2)]
+/// Go to adbc add add DataSet<>  -> Add-Migration AddAttendance -> Update-Database
+/// Update-Database cause an error because both User and Gig have cascadedelete on Attendance.
+/// Solution: disable CascadeDelete in one of these relationship. 
+/// Its better not to delete a Gig and just cancel it: allow user to undo the cancellation
+/// So if we never delete a gig, it is Ok to disable CascadeDelete btw Gig and Attendance
+
+//////// Disable CascadeDelete btw Gig and Attendance using FluentApi /////////
+/// Create a Folder: EntityConfigurations/AttendanceConfiguration.cs define constructor define FluentApi:
+/// Add Attendance relation with Gig : Many to One with WillCascadeOnDelete(false).
+/// Pay attention because we dont have navigation prop in AspNetUsers table, we cannot name it in WithMany(nav-prop). So leave it empty.
+/// Of course we can add nav-prop in ApplicationUser for Gig but we also can leave it empty.
+/// Re-Generate Migration : -Force + Update-Database
+53. Add Attendace.cs(many-to-many relation btw User & Gig) to represent 'add a Gig to Calendar' info. Remove CascadeDelete with Gig.
