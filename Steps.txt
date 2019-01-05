@@ -388,3 +388,9 @@
 /// Asp.net WebApi by default does not look for scalar parameter like an integer in the request body. It expects them to be in the URL
 /// So we decorate int parameter to [FromBody] attribute to tell web api to receive it from the body of request
 /// Build + test with postman
+
+/////// Testing the Api with Postman ///////
+/// The first Postman which is more popular in google have problem with authentication
+/// Open Postman -> Copy address bar to 'Enter Request URL here' section. replace the address of api: /api/attendances/
+/// Change GET to POST -> click 'raw' button : this is our request body 
+/// Click Send -> See html respond : Authentication is not working => Authorize tag navigate us to login page(home/index)

@@ -24,3 +24,7 @@
 
 	Close a tab:				Shift + Esc
 
+	New Tab (in Chrome)			Ctrl + T
+
+	Move cursor to Address bar	Ctrl + L
+
