@@ -445,3 +445,12 @@
 /// Use .done chain method if the call of api is successfull and do operation within it.
 /// if Api call is successfull: Change the lable and Background-Color of Button use chain method .removeClass("btn-default").addClass("btn-info").text("Going");
 56. Write JS at the end of index.cshtml and add Ajax call for /api/attendance. if success, change btn css else alert.
+
+/// A MISTAKE: in ajax call, Controller cannot bind recieved value to the gigId parameter: ASP.net expect the request from the body ([FromBody])
+/// In order to bind these two value, we need to put ajax parameter to 'object literal': {"key" : "value"}
+/// change $.post("/api/attendances", button.attr("data-gig-id")) --> $.post("/api/attendances", { "" : button.attr("data-gig-id") })
+
+////////// Cleaner way to bind data parameter in ajax to gigId parameter in Api Controller HttpPost Action //////////
+/// in JS: replace empty string "" with 'gigId'
+/// Create a new class to wrap this gigId parameter : class AttendanceDto
+/// DTO(Data Transfer Object): an architectural pattern to send data across processes.
