@@ -1,8 +1,9 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using GighubV2.Models;
 using Microsoft.AspNet.Identity;
 
-namespace GighubV2.Controllers.Api
+namespace GighubV2.Controllers
 {
     [Authorize]
     public class AttendancesController : ApiController
@@ -15,9 +16,15 @@ namespace GighubV2.Controllers.Api
         }
 
         [HttpPost]
-        public IHttpActionResult Attend(int gigId)
+        public IHttpActionResult Attend([FromBody] int gigId)
         {
             var currentUserId = User.Identity.GetUserId();
+            var alrearyExist = _context.Attendances.Any(a => a.AttendeeId == currentUserId && a.GigId == gigId);
+            if (alrearyExist)
+            {
+                return BadRequest("The attendance already exists."); 
+            }
+
             var attendance = new Attendance
             {
                 GigId = gigId,
@@ -30,6 +37,14 @@ namespace GighubV2.Controllers.Api
             _context.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpGet]
+        public IHttpActionResult ReturnAllAttendances()
+        {
+            var attendances = _context.Attendances.ToList();
+
+            return Ok(attendances);
         }
     }
 }

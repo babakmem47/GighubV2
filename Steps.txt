@@ -388,9 +388,27 @@
 /// Asp.net WebApi by default does not look for scalar parameter like an integer in the request body. It expects them to be in the URL
 /// So we decorate int parameter to [FromBody] attribute to tell web api to receive it from the body of request
 /// Build + test with postman
+/// Note: It is not necessary to put api in Api folder under Controllers in Solution Explorer, 
+/// But it is necessary to bring /api/ before the name of api controller in the URL at the beginnig of the request. : http://localhost:14143/api/attendances
 
 /////// Testing the Api with Postman ///////
 /// The first Postman which is more popular in google have problem with authentication
 /// Open Postman -> Copy address bar to 'Enter Request URL here' section. replace the address of api: /api/attendances/
 /// Change GET to POST -> click 'raw' button : this is our request body 
 /// Click Send -> See html respond : Authentication is not working => Authorize tag navigate us to login page(home/index)
+/// ERROR: if not set [FromBody] for gigId in Api, get this error: "Message": "The requested resource does not support http method 'POST'."
+/// ERROR: if not Login : status 200 OK but get HTML in the result which should not have happend! 
+/// we can see: <title> Log in - ... in html becasue the authentication is not working and the api is redirecting me to the login page
+/// ERROR : "Message": "The request entity's media type 'text/plain' is not supported for this resource.", => We missed the header 
+/// SOLUTION: click Header(0) -> in Header: type Content-Type and in Value: application/json
+/// When Post request in Api is working: The body of respont is empty and STATUS: 200 OK
+/// ERROR: if click one more time(body is the same) => get error: in the middle of message: "Violation of PRIMARY KEY constraint"
+/// So we need to modify our action to prevent duplicates
+
+/////// Preventing Duplication in Api //////////
+/// Having Attendance class in our model let us directly query that.
+/// We have to check if attendance obj already exist for the current user and the given gig. 
+/// var alrearyExist = _context.Attendances.Any(a => a.AttendeeId == currentUserId && a.GigId == gigId);
+/// return a message instead of error: if (alrearyExist) { return BadRequest("The attendance already exists."); }. 
+/// We can click again to see a message: STATUS: 400 Bad Request + { "Message": "The attendance already exists." }
+54. Build an api for adding attendance + prevent duplication with providing error message and returning Bad Request(STATUS:400)

@@ -28,3 +28,5 @@
 
 	Move cursor to Address bar	Ctrl + L
 
+	Close all tabs				Alt + W + L
+
