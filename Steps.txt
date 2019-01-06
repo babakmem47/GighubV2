@@ -413,7 +413,7 @@
 /// We can click again to see a message: STATUS: 400 Bad Request + { "Message": "The attendance already exists." }
 54. Build an api for adding attendance + prevent duplication with providing error message and returning Bad Request(STATUS:400)
 
-/// Add a toggle Button (Going? white -> Going blue) in each Gig
+///////// Add a toggle Button (Going? white -> Going blue) in each Gig //////////////
 /// in index.html -> details ->  Add a button after the 'Genre'. -> Refresh page. This button is a little big!
 ////// Decrease the size of Button /////////
 /// use bootstrap class: "btn-sm" to smallize the button. It's not working! because of a mistake we made in earlier bootstrap overriding!
@@ -422,4 +422,26 @@
 /// Problem: Buttons are not align
 /// Solution: use another bootstrap class: "pull-right" for button in index.cshtml
 /// Problem: if Artist name is short, pull-right not work properly.
-/// Solution: Define style="min-width: 150px;" for detail div. So in .gigs > li .details .genre { min-width: 150px; } : 
+/// Solution: Define style="min-width: 150px;" for detail div. So in .gigs > li .details .genre { min-width: 150px; }
+55. Add a Button to each Gig and do css to align it
+
+///////////// Wiring up the Button to the API ////////////////////
+/// Write some JS at the bottom of index.cshtml
+/// Remember: What we put here will be rendered AFTER all js libraries like jquery or bootstrap
+/// We need an identifier for our button: Define a new class(a marker) for the buttton: use js-toggle-attendance to mark the button.
+/// Make ajax call for clicking btn: use jquery 'post' method.
+/// Ajax post method: 1st argument: URL of api. 2nd arg: data we want to send in the request body which shoud be the 'gigId'
+
+////// Where do we get gigId? /////////
+/// We need to add it to the button as a data attribute : <button data-gig-id="@gig.Id" ...
+/// To use it: Put 'e'(represent event) in the arg of click function for button. 
+/// From event we could get the source of the event which is the button
+/// use $(e.target) as the second parameter for post method of Ajax to 
+/// $(e.target) : gives the source of event
+/// Test: $(button).click(function(e) { console.log(e.target) });						=> give me a whole <button> tag! in console
+/// Test:								console.log($(e.target).attr("data-gig-id")		=> give the id of gig that we click!
+/// Ajax post method with these two parameter, post to api and return a promise. So we can chain the done and fail methods.
+/// Chaining allows us to run multiple jQuery methods (on the same element) within a single statement.
+/// Use .done chain method if the call of api is successfull and do operation within it.
+/// if Api call is successfull: Change the lable and Background-Color of Button use chain method .removeClass("btn-default").addClass("btn-info").text("Going");
+56. Write JS at the end of index.cshtml and add Ajax call for /api/attendance. if success, change btn css else alert.
