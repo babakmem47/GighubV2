@@ -412,3 +412,14 @@
 /// return a message instead of error: if (alrearyExist) { return BadRequest("The attendance already exists."); }. 
 /// We can click again to see a message: STATUS: 400 Bad Request + { "Message": "The attendance already exists." }
 54. Build an api for adding attendance + prevent duplication with providing error message and returning Bad Request(STATUS:400)
+
+/// Add a toggle Button (Going? white -> Going blue) in each Gig
+/// in index.html -> details ->  Add a button after the 'Genre'. -> Refresh page. This button is a little big!
+////// Decrease the size of Button /////////
+/// use bootstrap class: "btn-sm" to smallize the button. It's not working! because of a mistake we made in earlier bootstrap overriding!
+/// It's not working because we define .btn in Site.css after bootstrap classes. So it override all bootstrap classes!
+/// Solution: temporalily comment out font-size and padding attribute in .btn in Site.css
+/// Problem: Buttons are not align
+/// Solution: use another bootstrap class: "pull-right" for button in index.cshtml
+/// Problem: if Artist name is short, pull-right not work properly.
+/// Solution: Define style="min-width: 150px;" for detail div. So in .gigs > li .details .genre { min-width: 150px; } : 

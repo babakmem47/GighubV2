@@ -30,3 +30,5 @@
 
 	Close all tabs				Alt + W + L
 
+	Comment /*  */				Select lines => Ctrl + K, Ctrl + C
+
