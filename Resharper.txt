@@ -1,0 +1,3 @@
+
+When changing a parameter of a method
+change 2 or more local variables name:				put the cursor on red variable -> Alt + Enter -> Change all local 'variable-name' 

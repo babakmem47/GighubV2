@@ -451,6 +451,15 @@
 /// change $.post("/api/attendances", button.attr("data-gig-id")) --> $.post("/api/attendances", { "" : button.attr("data-gig-id") })
 
 ////////// Cleaner way to bind data parameter in ajax to gigId parameter in Api Controller HttpPost Action //////////
-/// in JS: replace empty string "" with 'gigId'
+/// in JS: replace empty string "" with 'gigId' : now it look likes { gigId: button.attr("data-gig-id") }
 /// Create a new class to wrap this gigId parameter : class AttendanceDto
-/// DTO(Data Transfer Object): an architectural pattern to send data across processes.
+/// DTO(Data Transfer Object): an architectural pattern to send data across processes. In client side we have some piece of code and in server side we have some other pieces.
+/// To communicate between these two pieces of code(2 Processes) use DTO
+/// Create Class AttendanceDto.cs and put it in separate folder "Dtos".
+/// Now in AttendanceController replace '[FromBody] int gigId' with AttendanceDto dto -> replace 2 gigId(local variable) with dto.GigId
+/// Test the project => Something falied!
+/// To find out what is wrong: Ctrl + Shift + i -> click red cross icon with 1 beside it ->  400 (Bad Request)
+/// Reason: We already have an attendance for this gig for the current user.
+/// For other gigs it works! Hurra
+/// Ideally when we render a list of gigs, a 'Going' buttons should be in the state that provide user information: blue if user already registers attending to each gig. Do in the future.
+57. Replace Ajax second param with key:value. Use DTO object to communicate between JS code(Ajax) and API. Now the button 'Going?' works.

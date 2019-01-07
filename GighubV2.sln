@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Application User Identity.txt = Application User Identity.txt
 		Entity Framework.txt = Entity Framework.txt
 		Fluent Api.txt = Fluent Api.txt
+		Resharper.txt = Resharper.txt
 		Shortcuts.txt = Shortcuts.txt
 		Steps.txt = Steps.txt
 	EndProjectSection
