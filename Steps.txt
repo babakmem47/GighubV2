@@ -519,3 +519,5 @@
 /// 9. Change Index.cshtml: in front of each Artist name, add a button btn-link. Add JS for button link with ajax(similar to attendance)
 58. Implement Follow an artist(9 steps)
 
+////////////////////// Hiding Actions(Follow and Going) from Anonymous Users /////////////////////////
+
