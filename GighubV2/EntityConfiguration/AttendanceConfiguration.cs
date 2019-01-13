@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GighubV2.Models;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Web;
-using GighubV2.Models;
 
 namespace GighubV2.EntityConfiguration
 {
@@ -15,6 +11,21 @@ namespace GighubV2.EntityConfiguration
             //// Many-To-One with Gig ////
             HasRequired(a => a.Gig)
                 .WithMany()
+                .WillCascadeOnDelete(false);
+        }
+    }
+
+    public class ApplicationUserConfiguration : EntityTypeConfiguration<ApplicationUser>
+    {
+        public ApplicationUserConfiguration()
+        {
+            //// Relationship ////
+            HasMany(u => u.Followers)
+                .WithRequired(f => f.Followee)
+                .WillCascadeOnDelete(false);
+
+            HasMany(f => f.Followees)
+                .WithRequired(u => u.Follower)
                 .WillCascadeOnDelete(false);
         }
     }

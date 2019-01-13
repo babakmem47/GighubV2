@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using GighubV2.EntityConfiguration;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
-using GighubV2.EntityConfiguration;
 
 namespace GighubV2.Models
 {
@@ -9,10 +9,12 @@ namespace GighubV2.Models
         public DbSet<Gig> Gigs { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<Following> Followings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Configurations.Add(new AttendanceConfiguration());
+            modelBuilder.Configurations.Add(new ApplicationUserConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

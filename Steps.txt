@@ -82,7 +82,7 @@
 /// Controller not responsible for parsing string value into DateTime object.  
 /// Controller shoud act as a coordinator for application logic: WHAT SHOULD HAPPEN NEXT! 
 /// Controller is like a manager. Not do the actual work. 
-/// Information Expert Pronciple: Class/Object that has the information to do sth, should be the one  
+/// Information Expert Principle: Class/Object that has the information to do sth, should be the one  
 /// that will carry that responsibility. So the viewModel is the class that knows about Date and Time!
 30. Transfer the parsing Date and Time task from Controller to ViewModel class.
 
@@ -148,7 +148,7 @@
 /// also Razor view automatically escape content.	Exception: Html.Raw()
 
 //////// Cross-site Request Forgery (CSRF)////////
-/// Allow an attacker to perfor actions on behalf of a user without their knowledge.
+/// Allow an attacker to perform actions on behalf of a user without their knowledge.
 /// Prevent: use @Html.AntiForgeryToken() in view and decorate [ValidateAntiForgeryToken] in Controller
 37. Add @Html.AntiForgeryToken() in Create.chtml and decorate Create action with [ValidateAntiForgeryToken]
 
@@ -351,9 +351,11 @@
 
 ///////////////////////////////////// 13. Implementing a Use Case from Top to Bottom ///////////////////////////////////////////////////
 ///////// Add a Gig to the Calendar //////////
+/// We want to inplement a usecase "Add a Gig to the Calendar":
+/// Dont rely too mush to the words and requirement documents!
 /// When building Software, Do not attempt to model the universe!  Gig Calendar Month Day GoogleCal iCal ...
 /// Pay attention to only create enought of the model to solve the problem at hand.
-/// The problem: Keeping track of the gigs the user  might be attending.
+/// The Problem(we are trying to solve): Keeping track of the gigs the user might be attending.
 /// Solution : simple association btw User and Gig => many to many relationship
 /// We need 3rd table name Attendance but we add this manually: becasue we need to query that directry
 /// Add Attendance.cs to project  ApplicstionUser Attendee, string AttendeeId, Gig Gid, int GigId
@@ -361,6 +363,7 @@
 /// Specify order for primary key : decorate both with [Column(Order = 1)], [Column(Order = 2)]
 /// Go to adbc add add DataSet<>  -> Add-Migration AddAttendance -> Update-Database
 /// Update-Database cause an error because both User and Gig have cascadedelete on Attendance.
+/// Problem: We have multiple Cascade Paths
 /// Solution: disable CascadeDelete in one of these relationship. 
 /// Its better not to delete a Gig and just cancel it: allow user to undo the cancellation
 /// So if we never delete a gig, it is Ok to disable CascadeDelete btw Gig and Attendance
@@ -373,21 +376,37 @@
 /// Re-Generate Migration : -Force + Update-Database
 53. Add Attendace.cs(many-to-many relation btw User & Gig) to represent 'add a Gig to Calendar' info. Remove CascadeDelete with Gig.
 
-/////// Add Button at the right bottom of each Gig ////////
+/////// Building the UI: Add Button at the right bottom of each Gig ////////
 /// When user click on btn, bg-color of btn change from white to blue and also add corresponding gig to the calendar.
 /// To implement this, we are gonna use Ajax becasue we dont want to a full page reload. So on the server we create a lightweight API.
-/// Create /api/attendances with HTTPPOST is more common. We'll need to include some data in the request body : gigId, Not UserId!
-/// the UserId (id of currently loged in user) should be calculated on the server.
+/// Create /api/attendances with HTTPPOST (because POST is more common. We'll need to include some data in the request body : gigId, Not UserId!
+/// the UserId (id of currently logged in user) should be calculated on the server. Because if we add userId to Ajax, it open the security holes!
+/// Malicious user pass other user's Id to API using a loop. This is messing with the whole system!
 
 /////// Building the API /////////
 /// R-click on 'Controllers' -> Add Controller... -> Add Web API 2 controller-Empty -> name it: AttendancesController
 /// Copy the last line of 'readme.txt' and put it in Global.asax(at the begining of Application_Start method) -> Save 
 /// So in Attendances Controller we need to recieve an id from view, create a new attendance obj, add it to the context and save changes.
 /// We need to use [Authorize] for this controller because we get user id in action of this controller.
-/// this is very basic implementation: Not checking duplicate, not error handling.
 /// Asp.net WebApi by default does not look for scalar parameter like an integer in the request body. It expects them to be in the URL
 /// So we decorate int parameter to [FromBody] attribute to tell web api to receive it from the body of request
-/// Build + test with postman
+/// this is very basic implementation: Not checking duplicate, not error handling.
+///
+/// [HttpPost]
+/// public IHttpActionResult Attend([FromBody] int gigId)
+/// {
+///		var attendance = new Attendance
+///		{
+///			GigId = gigId,
+///			AttendeeId = User.Identity.GetUserId()
+///		};
+///		_context.Attendances.Add(attendance);
+///		_context.SaveChanges();
+///
+///		return Ok();
+/// }
+///
+/// Build + test with Postman(explained below)
 /// Note: It is not necessary to put api in Api folder under Controllers in Solution Explorer, 
 /// But it is necessary to bring /api/ before the name of api controller in the URL at the beginnig of the request. : http://localhost:14143/api/attendances
 
@@ -405,7 +424,7 @@
 /// ERROR: if click one more time(body is the same) => get error: in the middle of message: "Violation of PRIMARY KEY constraint"
 /// So we need to modify our action to prevent duplicates
 
-/////// Preventing Duplication in Api //////////
+/////// Preventing Duplication in Api: dont reserve same gid for a user //////////
 /// Having Attendance class in our model let us directly query that.
 /// We have to check if attendance obj already exist for the current user and the given gig. 
 /// var alrearyExist = _context.Attendances.Any(a => a.AttendeeId == currentUserId && a.GigId == gigId);
@@ -422,7 +441,7 @@
 /// Problem: Buttons are not align
 /// Solution: use another bootstrap class: "pull-right" for button in index.cshtml
 /// Problem: if Artist name is short, pull-right not work properly.
-/// Solution: Define style="min-width: 150px;" for detail div. So in .gigs > li .details .genre { min-width: 150px; }
+/// Solution: Define style="min-width: 150px;" for detail div. So in .gigs > li .details { min-width: 150px; }
 55. Add a Button to each Gig and do css to align it
 
 ///////////// Wiring up the Button to the API ////////////////////
@@ -438,12 +457,14 @@
 /// From event we could get the source of the event which is the button
 /// use $(e.target) as the second parameter for post method of Ajax to 
 /// $(e.target) : gives the source of event
+/// e.target alone : return full html of button on the console
 /// Test: $(button).click(function(e) { console.log(e.target) });						=> give me a whole <button> tag! in console
 /// Test:								console.log($(e.target).attr("data-gig-id")		=> give the id of gig that we click!
-/// Ajax post method with these two parameter, post to api and return a promise. So we can chain the done and fail methods.
+/// Ajax post method with these two parameter, post to api and return a promise. So we can chain the done and fail methods to handle success and error senarios.
 /// Chaining allows us to run multiple jQuery methods (on the same element) within a single statement.
 /// Use .done chain method if the call of api is successfull and do operation within it.
 /// if Api call is successfull: Change the lable and Background-Color of Button use chain method .removeClass("btn-default").addClass("btn-info").text("Going");
+/// Not testing it yet!
 56. Write JS at the end of index.cshtml and add Ajax call for /api/attendance. if success, change btn css else alert.
 
 /// A MISTAKE: in ajax call, Controller cannot bind recieved value to the gigId parameter: ASP.net expect the request from the body ([FromBody])
@@ -451,6 +472,8 @@
 /// change $.post("/api/attendances", button.attr("data-gig-id")) --> $.post("/api/attendances", { "" : button.attr("data-gig-id") })
 
 ////////// Cleaner way to bind data parameter in ajax to gigId parameter in Api Controller HttpPost Action //////////
+/// The reason for we having this problem is because we have a scalar parameter in AttendancesController: int gigId
+/// if we put this in a complex type like an object, then we won't need [FromBody] anymore and in our JS, we can replace this "" with gigId as a Key.
 /// in JS: replace empty string "" with 'gigId' : now it look likes { gigId: button.attr("data-gig-id") }
 /// Create a new class to wrap this gigId parameter : class AttendanceDto
 /// DTO(Data Transfer Object): an architectural pattern to send data across processes. In client side we have some piece of code and in server side we have some other pieces.
@@ -463,3 +486,36 @@
 /// For other gigs it works! Hurra
 /// Ideally when we render a list of gigs, a 'Going' buttons should be in the state that provide user information: blue if user already registers attending to each gig. Do in the future.
 57. Replace Ajax second param with key:value. Use DTO object to communicate between JS code(Ajax) and API. Now the button 'Going?' works.
+/// Summary: Try to implement a usecase with the simple model to solve the problem at hand. nothing more! Do not attempt to model the universe!
+/// At each steps, focus only one aspect of development => it has two advantages: 1. you will be more productive 2. you can write better code
+
+
+///////////////////////////////////// 14.  ///////////////////////////////////////////////////
+////////// Implement Follow an artist UseCase ////////////////
+/// 1. Add a new class: Following.cs with 4 prop: FollowerId FolloweeId with their navigation prop.
+/// 2. Modify ApplicationUser: Add two ICollection<Following> Followers and Followees properties. They should be initialized in constructor(because they both are collections)
+/// Rule: When you add a property to a class and that property is a collection, you should always initialize it in the constructor. because that is the responsibility of that class
+/// 3. Add public DbSet<Following> Followings { get; set; } to Adbc
+/// 4. Add fluentApi for ApplicationUser:
+///		public class ApplicationUserConfiguration : EntityTypeConfiguration<ApplicationUser>
+///     {
+///         public ApplicationUserConfiguration()
+///         {
+///             //// Relationship ////
+///             HasMany(u => u.Followers)
+///                 .WithRequired(f => f.Followee)
+///                 .WillCascadeOnDelete(false);
+/// 
+///             HasMany(f => f.Followees)
+///                 .WithRequired(u => u.Follower)
+///                 .WillCascadeOnDelete(false);
+///         }
+///     }
+///
+/// 5. Add modelBuilder.Configurations.Add(new ApplicationUserConfiguration()); to onModelCreating in Adbc
+/// 6. Add-Migration AddFollowing
+/// 7. Add an Api : FollowingsController with an action Follow(FollowingDto dto)
+/// 8. Add FollowingDto.cs with prop: string ArtistId
+/// 9. Change Index.cshtml: in front of each Artist name, add a button btn-link. Add JS for button link with ajax(similar to attendance)
+58. Implement Follow an artist(9 steps)
+
