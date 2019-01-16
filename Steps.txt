@@ -520,4 +520,20 @@
 58. Implement Follow an artist(9 steps)
 
 ////////////////////// Hiding Actions(Follow and Going) from Anonymous Users /////////////////////////
-
+/// How we can find out if the user is authenticated or not? => That is the job of Controller to pass this infornation to the view.
+/// Solution: Change the model of view from an IEnumerable<Gig> to a ViewModel that has two properties:  
+///  var viewModel = new HomeViewModel
+///  {
+///      UpcomingGigs = upcomingGigs,
+///      ShowAction = User.Identity.IsAuthenticated
+///  };
+///
+/// There are 3 red name in the code below, So with Alt + Enter we create a class
+/// Change the type IQueryable to IEnumerable : because when we pass vm to the view, we want to iterate over it. We dont want to extend the query
+/// Move this viewmodel to ViewModels folder
+/// Send vm instead of upcomingGigs to View: return View(viewModel)
+/// in Index.cshtml: change the model behind this view from IEnumerable<GighubV2.Models.Gig> to GighubV2.ViewModels.HomeViewModel
+/// in Index.cshtml: change Model to Model.upcomingGigs
+/// use if block to display buttons: @if (Model.ShowActions) {button html line}
+/// Ctrl + Shift + B to build, text, beautiful!
+59. Hiding Actions(Follow and Going) from Anonymous Users

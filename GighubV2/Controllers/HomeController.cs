@@ -1,4 +1,5 @@
 ﻿using GighubV2.Models;
+using GighubV2.ViewModels;
 using System.Data.Entity;
 using System.Web.Mvc;
 
@@ -24,7 +25,14 @@ namespace GighubV2.Controllers
                 .Include(gg => gg.Artist)
                 .Include(gg => gg.Genre);
             //                .Where(gg => gg.DateTime > DateTime.Now);
-            return View(upcomingGigs);
+
+            var viewModel = new HomeViewModel
+            {
+                UpcomingGigs = upcomingGigs,
+                ShowActions = User.Identity.IsAuthenticated
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult About()
