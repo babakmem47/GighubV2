@@ -572,6 +572,23 @@
 /// Solution: in GigsController: After .Select(a => a.Gigs) we should include Artist and Genre because we are going to display both these attributes
 /// .Include(g => g.Artist)
 /// .Include(g => g.Genre)
-60. Implement View Gigs I'm Attending UseCase        
+60. Implement View Gigs I'm Attending UseCase
+
+/////// Refactoring: Applying the DRY Principle ///////////////
+/// Currently we have 2 Views that look exactrly the same: index.cshtml and attending.cshtml
+/// Views/Gigs/Attending.cshtml and Views/Home/index.cshtml
+/// We want a view that can be referenced by both GigsController and HomeController. This view needs to be in a Shared folder.
+/// Drag Index.cshtml into Shared folder and rename it to Gigs.cshtml because it renders a list of gigs
+/// Look at the model behind this view: GigsViewModel => Note the consistency in the code. We have a view called Gigs and a viewmodel called GigsViewModel
+/// Delete Attending view because we dont need it anymore.
+/// We just need to modify our controllers to use this view
+/// Go to HomeController -> insert "Gigs" in : return View("Gigs", viewModel);
+/// Go to GigsController -> insert "Gigs" in : return View("Gigs", viewModel);
+/// Test-> works fine but we lost the heading but this is pretty easy to fix
+/// Add public string Heading { get; set; } in GigsViewModel
+/// in Gigs.cshtml add <h1>@Model.Heading</h1> on top of page
+/// Set the Heading in Controllers: GigsController -> Heading = "Gigs I'm attending"   HomeController -> Heading = "Upcoming Gigs" + Build
+61. Combine 2 similar views(index.cshtml and attending.cshtml) into one (Gigs.cshtml).
+
 
             

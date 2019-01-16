@@ -1,7 +1,7 @@
-﻿using System.Data.Entity;
-using GighubV2.Models;
+﻿using GighubV2.Models;
 using GighubV2.ViewModels;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -31,14 +31,15 @@ namespace GighubV2.Controllers
                 .Include(g => g.Artist)
                 .Include(g => g.Genre)
                 .ToList();
-            
+
             var viewModel = new GigsViewModel
             {
                 UpcomingGigs = gigs,
-                ShowActions = User.Identity.IsAuthenticated
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Gigs I'm attending"
             };
 
-            return View(viewModel);
+            return View("Gigs", viewModel);
         }
 
         [Authorize]
@@ -48,7 +49,7 @@ namespace GighubV2.Controllers
             {
                 Genres = _context.Genres.ToList()
             };
-            
+
             return View(viewModel);
         }
 
