@@ -537,3 +537,41 @@
 /// use if block to display buttons: @if (Model.ShowActions) {button html line}
 /// Ctrl + Shift + B to build, text, beautiful!
 59. Hiding Actions(Follow and Going) from Anonymous Users
+
+////////// Implement View Gigs I'm Attending UseCase ////////////////
+/// Currently, there is no way to verify the gigs added to the calendar. 
+/// So we need to implement View Gigs I'm Attending UseCase as a secondary or supporting usecase.
+/// Create new action 'Attending' in GigsController which will return a view that will render a list of gigs the user will be attending.
+/// Decorate this action with [Authorize] attribute because this should be accessible only by authenticated users.
+/// Then we need the list of gigs the current user is going to attend. (in Attendances table)
+/// var currentUserId = User.Identity.GetUserId();
+/// var gigs = _context.Attendances.Where(a => a.AttendeeId == currentUserId);
+/// the code above give us the list of attendances. But what we need is the list of gigs.
+/// So we extend the code by .Select :
+/// var gigs = _context.Attendances.Where(a => a.AttendeeId == currentUserId).Select(a => a.Gig).ToList() and put it in View: return View(gigs);
+/// Manually go to Views->Gigs->Add View...->name it Attending
+/// We want this view to show the list of gigs like we have in the Home Page. So we go to index.cshtml. We have 2 choices:
+/// 1. Copy the markup from index.cshtml to new view 2. Extract this to the partial view so we can reuse it both places.
+/// For now, we go with the copy approach because we dont want to focus on sth else and get distracted by refactoring by moving things around!
+/// Lets build this page, make it work and then we'll do refactoring.
+/// Select entire <ul> and paste it in attending view.
+/// the model should be HomeViewModel: It is a little odd because we are in attending view but we are refrencing HomeViewModel. So it is better to
+/// rename this HomeViewModel to GigsViewModel that we can reuse on both these views
+/// The last step is to put a link to this action in our navigation bar:
+/// Go to _LoginPartial.cshtml and put @Url.Action("Attending", "Gigs") in the href : <li><a href="@Url.Action("Attending", "Gigs")">Gigs I'm Going</a></li>
+/// Build + Clear Attendances table for test --> Test -> We get an error because we have to return a viewModel instead of a list of gigs to Attending View.
+///  var viewModel = new GigsViewModel()
+///  {
+///      UpcomingGigs = gigs,
+///      ShowAction = User.Identity.IsAuthenticated
+///  };
+///
+/// return View(viewModel)
+///
+/// Test again. List is empty -> Add a Gig -> Click on View Gigs I'm Attending -> Get another error: @gig.Artist.Name because we have'nt eager loaded Artist.
+/// Solution: in GigsController: After .Select(a => a.Gigs) we should include Artist and Genre because we are going to display both these attributes
+/// .Include(g => g.Artist)
+/// .Include(g => g.Genre)
+60. Implement View Gigs I'm Attending UseCase        
+
+            

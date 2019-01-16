@@ -1,4 +1,5 @@
-﻿using GighubV2.Models;
+﻿using System.Data.Entity;
+using GighubV2.Models;
 using GighubV2.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.Linq;
@@ -18,6 +19,26 @@ namespace GighubV2.Controllers
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
+        }
+
+        [Authorize]
+        public ActionResult Attending()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var gigs = _context.Attendances
+                .Where(a => a.AttendeeId == currentUserId)
+                .Select(a => a.Gig)
+                .Include(g => g.Artist)
+                .Include(g => g.Genre)
+                .ToList();
+            
+            var viewModel = new GigsViewModel
+            {
+                UpcomingGigs = gigs,
+                ShowActions = User.Identity.IsAuthenticated
+            };
+
+            return View(viewModel);
         }
 
         [Authorize]
