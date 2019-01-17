@@ -590,5 +590,19 @@
 /// Set the Heading in Controllers: GigsController -> Heading = "Gigs I'm attending"   HomeController -> Heading = "Upcoming Gigs" + Build
 61. Combine 2 similar views(index.cshtml and attending.cshtml) into one (Gigs.cshtml).
 
+/////// Add Vertical Space Between the Heading and The ListOfGigs //////////
+/// We can easily do so with css. We have 2 options here:
+/// 1. Define a style for our H1 heading and add margin-bottom there:   h1 { margin-bottom: 20px; } Problem: maybe on other page we want the text below h1 close to it
+/// 2. Add margin-top to our list of gigs : .gigs { margin-top: 20px; }		Problem: maybe on other pages we dont want margin on top of list
+/// 3rd way is cleaner more reliable more usable:
+/// Go to Site.css: before bootstrap overrdies add these classes:
+/// .voffset { margin-top: 2px; }
+/// .voffset1 { margin-top: 5px; }
+/// .voffset2 { margin-top: 10px; }
+/// .voffset3 { margin-top: 20px; }
+/// .voffset4 { margin-top: 40px; }
+/// .voffset5 { margin-top: 80px; }
+/// Go to Gigs.cshtml-> in ul tag add one of the above class and test it until get the desired result:  <ul class="gigs voffset3">
+62. Add Vertical Space Between the Heading and The ListOfGigs.
 
             
