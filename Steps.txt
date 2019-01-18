@@ -648,4 +648,24 @@
 /////// Redirect the artist to this page after he/she add a new Gig ///////
 /// Go to GigController -> Find Create action with Ctrl+F12 -> 
 /// replace return RedirectToAction("Index", "Home"); with return RedirectToAction("Mine", "Gigs");
-64. Redirect the artist to this page after he/she add a new Gig.
+64. Rename Heading + Redirect the artist to this page after he/she add a new Gig.
+
+///////////////////////////////////// 2. Basic CRUD: Implementing the Update ///////////////////////////////////////////////////
+//////////////// Refactoring out existing form for adding a Gig and reusing for Updating existing Gig //////////////////////////
+///////// Displaying Actions on Hover ////////////
+/// We want to hide Edit|Delete for a gig in MyUpcomingGigs page(for artist) and when the user hover on them, they show up
+/////// Create Edit | Delete Links below genre name ////////
+/// in Mine.cshtml -> under <span class="genre"> -> type zen coding: div.action Enter => <div class="action"><div>
+/// Hit enter btw div -> a[href="#"] Enter => <a href="#"></a> : btw type 'Edit' -> Refresh browser to see the result for now
+/// We want to use css to show this only when the user hovers their mouse over this gig.
+/// in the end of Site.css: 
+	.gigs > li .action {
+		font-size: 15px;
+		display: none;
+	}
+
+	.gigs > li:hover .action{
+		display: block;
+	}
+//// no need for any JS or JQuery code!
+65. Displaying Actions(Edit) on Hover
