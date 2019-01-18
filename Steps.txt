@@ -640,4 +640,12 @@
 /// If we decided to reuse that view, we had to use conditional statement that pollute the ViewModel and View all together.
 /// 4. No need to pass ViewModel to this view. Just pass IEnumerable<Gid> : Delete .upcomingGigs from Model.
 /// 5. Eager Load Genre: for display Genre.Name
-/// 6. Add a link in Navigation bar: _LoginPartial -> Duplicate an <li> -> 
+/// 6. Add a link in Navigation bar: _LoginPartial -> Duplicate an <li>
+/// 7. Edit like this: <li><a href="@Url.Action("Mine", "Gigs")">My Upcoming Gigs</a></li>
+63. Implement My Upcoming Gigs (for an Artist)
+
+/// Minor issue: We need to rename heading for this page. Mine.cshtml -> <h2>My Upcoming Gigs</h2>
+/////// Redirect the artist to this page after he/she add a new Gig ///////
+/// Go to GigController -> Find Create action with Ctrl+F12 -> 
+/// replace return RedirectToAction("Index", "Home"); with return RedirectToAction("Mine", "Gigs");
+64. Redirect the artist to this page after he/she add a new Gig.

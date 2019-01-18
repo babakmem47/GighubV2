@@ -1,7 +1,7 @@
-﻿using System;
-using GighubV2.Models;
+﻿using GighubV2.Models;
 using GighubV2.ViewModels;
 using Microsoft.AspNet.Identity;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -86,7 +86,7 @@ namespace GighubV2.Controllers
             _context.SaveChanges();
 
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Mine", "Gigs");
         }
     }
 }
