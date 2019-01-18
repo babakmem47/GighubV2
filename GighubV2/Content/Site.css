@@ -181,3 +181,12 @@ select.form-control {
     .gigs > li .details .genre {
         font-size: 12px;
     }
+
+.gigs > li .action {
+    font-size: 14px;
+    display: none;
+}
+
+.gigs > li:hover .action {
+    display: block;
+}
