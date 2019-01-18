@@ -605,4 +605,39 @@
 /// Go to Gigs.cshtml-> in ul tag add one of the above class and test it until get the desired result:  <ul class="gigs voffset3">
 62. Add Vertical Space Between the Heading and The ListOfGigs.
 
-            
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////// 							//////////////////////////////////////////////
+/////////////////////////////////////////////////////  Part 2. Advanced Topics  //////////////////////////////////////////////
+/////////////////////////////////////////////////////							//////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////// 1. Basic CRUD: Implementing the Read ///////////////////////////////////////////////////
+////////// Implement My Upcoming Gigs (as an Artist) ////////////////
+/// First we need an Action: In Gig Controller, create an action: Mine 
+/// Decorate this action with [Authorize]: Only authenticated artist can access this to view his/her upcomig gigs.
+	public ActionResult Mine()
+	{
+		var currentUserId = User.Identity.GetUserId();
+		var gigs = _context.Gigs
+			.Where(g => g.ArtistId == currentUserId && g.DateTime > DateTime.Now)
+			.ToList();
+		return View(gigs);
+	}
+
+/// We want only future gigs so we add condition for it and also end query with ToList() to immediately execute the query.
+/// We want to display the in the format similar to the Gigs.cshtml.
+/// Go to Gigs.cshtml: We have 2 choices: 1. copy markup or reuse it. which one is Better? 
+/// Reusing is not always a good thing. It is better to copy because we have ShowAction to display button and not need it.
+/// Also we need another actions in this view : ( Edit | Delete ) So we are gonna have more conditional state here.
+/// We cannot reuse it because it will goingto be too noisy. also we have some unwanted JQuery code at the bottom of it.
+/// These existing JS code does not apply to our future Edit | Delete actions so they are useless
+/// We dont want to make this view Jack of all trades! 
+/// 1. Just select the <ul> from Gigs.cshtml -> copy it
+/// 2. Create new view for Mine() action -> name it Mine.cshtml ->  Delete ShowAction code block -> 
+/// No need to display name. The artist want to know what he/she is playing, where and when.  1. What  2. Where  3. When
+/// 3. Replace 'Venue' instead of 'Name' of artist.
+/// If we decided to reuse that view, we had to use conditional statement that pollute the ViewModel and View all together.
+/// 4. No need to pass ViewModel to this view. Just pass IEnumerable<Gid> : Delete .upcomingGigs from Model.
+/// 5. Eager Load Genre: for display Genre.Name
+/// 6. Add a link in Navigation bar: _LoginPartial -> Duplicate an <li> -> 
