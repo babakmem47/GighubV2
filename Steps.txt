@@ -630,7 +630,7 @@
 /// Go to Gigs.cshtml: We have 2 choices: 1. copy markup or reuse it. which one is Better? 
 /// Reusing is not always a good thing. It is better to copy because we have ShowAction to display button and not need it.
 /// Also we need another actions in this view : ( Edit | Delete ) So we are gonna have more conditional state here.
-/// We cannot reuse it because it will goingto be too noisy. also we have some unwanted JQuery code at the bottom of it.
+/// We cannot reuse it because it will going to be too noisy. also we have some unwanted JQuery code at the bottom of it.
 /// These existing JS code does not apply to our future Edit | Delete actions so they are useless
 /// We dont want to make this view Jack of all trades! 
 /// 1. Just select the <ul> from Gigs.cshtml -> copy it
@@ -655,8 +655,8 @@
 ///////// Displaying Actions on Hover ////////////
 /// We want to hide Edit|Delete for a gig in MyUpcomingGigs page(for artist) and when the user hover on them, they show up
 /////// Create Edit | Delete Links below genre name ////////
-/// in Mine.cshtml -> under <span class="genre"> -> type zen coding: div.action Enter => <div class="action"><div>
-/// Hit enter btw div -> a[href="#"] Enter => <a href="#"></a> : btw type 'Edit' -> Refresh browser to see the result for now
+/// in Mine.cshtml -> under <span class="genre"> -> type zen coding: div.action Tab => <div class="action"><div>
+/// Hit enter btw div -> a[href="#"] Tab => <a href="#"></a> : btw type 'Edit' -> Refresh browser to see the result for now
 /// We want to use css to show this only when the user hovers their mouse over this gig.
 /// in the end of Site.css: 
 	.gigs > li .action {
@@ -675,7 +675,7 @@
 /// 1. First we need an action(very similar to Create action). 
 /// Go to GigController -> Ctrl+F12 -> type Create -> select all(Ctrl+w) -> Ctrl+d to duplicate. -> rename it to Edit
 /// Define a parameter for id of the gig:(int id) 
-/// We do not have to permit anyone can edit any gig. Only the user that create his own gig shoud be permitted to edit that.
+/// We do not have to permit anyone can edit any gig. Only the user that create his own gig should be permitted to edit that.
 /// The code var gig = _context.Gigs.Single(g => g.Id == id); have a security hole. because anyone can pass a gig id to edit.
 /// So we need a second condition: && g.ArtistId == currentUserId
 /// Next we need to initialize viewModel
@@ -729,7 +729,7 @@
 //////////// Updating Data: Implement the Update operation //////////////////
 /// We are gonna create a new action call Update for this task.
 /// in GigForm.cshtml we have Html.BeginForm("Create"...) but if we editing a gig we want a different action to be called: Update
-/// So we want this to be dynamic. Use the same technic we used to render the heading for the page
+/// So we want this to be dynamic. Use the same technique we used to render the heading for the page
 /// replace @using (Html.BeginForm("Create", "Gigs")) 
 ///    with @using (Html.BeginForm(@Model.Action, "Gigs"))
 /// Alt+Enter on Action to create this prop in GigFormViewModel 
