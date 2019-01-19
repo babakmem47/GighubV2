@@ -879,6 +879,23 @@ public string Action
 /// We dont delete things, we cancel them, reject them, decline them, return them
 69. add bool IsCanceled prop to Gig.cs
 
+//////////// Building an API /////////////////
+/// We're gonna use a mechanism similar to what we dit when Implementing follow an artist or attend a Gig
+/// Put a link next to Edit link an call it Cancel. When user click it, we're gonna use Ajax to call the server.
+/// Use Ajax: because we don't want to do a full page reload
+/// So first we need an API:
+/// Solution Explorer -> Controllers -> Create new folder name Api -> R-click -> Add -> Web Api 2 Controller -> name it GigsController
+
+
+
+
+
+
+
+
+
+
+
 
 
 
