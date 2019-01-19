@@ -669,3 +669,127 @@
 	}
 //// no need for any JS or JQuery code!
 65. Displaying Actions(Edit) on Hover
+
+///////////// Populating a Form ////////////////
+/// Now we have Edit link. We want to redirect the user (after click to link) to the page that he can edit the gig.
+/// 1. First we need an action(very similar to Create action). 
+/// Go to GigController -> Ctrl+F12 -> type Create -> select all(Ctrl+w) -> Ctrl+d to duplicate. -> rename it to Edit
+/// Define a parameter for id of the gig:(int id) 
+/// We do not have to permit anyone can edit any gig. Only the user that create his own gig shoud be permitted to edit that.
+/// The code var gig = _context.Gigs.Single(g => g.Id == id); have a security hole. becasue anyone can pass a gig id to edit.
+/// So we need a second condition: && g.ArtistId == currentUserId
+/// Next we need to initialize viewModel
+/// We can reuse the view Create to pass viewModel. So Create name for this view is not a good name anymore. We will change it.
+/// Final Step: Change the Edit link in Mine.cshtml: <a href="@Url.Action("Edit", "Gigs", new { id = gig.Id })">Edit</a>
+	[Authorize]
+	public ActionResult Edit(int id)
+	{
+		var currentUserId = User.Identity.GetUserId();
+		var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == currentUserId);
+
+		var viewModel = new GigFormViewModel()
+		{
+			Venue = gig.Venue,
+			Date = gig.DateTime.ToString("d MMM yyyy"),
+			Time = gig.DateTime.ToString("HH:mm"),
+			Genre = gig.GenreId,
+			Genres = _context.Genres.ToList()
+		};
+
+		return View("Create", viewModel);
+	}
+/// Everything is fine, just 2 problem: Heading must be 'Edit a Gig' and Genre not show because of css overriding.
+
+//////// Fix the issue with DropDownList: seems to be empty and not showing selected item //////////
+/// R-click on DropDownList -> inspect -> if disable padding, the problem solve
+/// So disable padding for form Control and set height:44px; -> Site.css: .form-control {} -> replace padding with height:44px
+/// My way: Only disable padding for DropDownList select control 
+			select.form-control {
+				padding: 0 15px;
+				height: 40px;
+			}
+
+/// Make Save Button a little Bigger /////
+/// R-click on Save Button -> inspect -> click .cls -> type btn-lg -> see the result for yourself
+/// Go to Create view -> add class btn-lg to Save button
+
+//////// Refactoring: rename Create view to GigForm //////////
+/// Go to Solution Explorer -> Views -> Gigs -> F2 on Create.cshtml -> rename it to GigForm
+/// Now we need to modify our actions -> Modify "Create" to "GigForm" in Edit and Create actions : 
+	return View("GigForm", viewModel);
+
+////// Problem of Heading /////////
+/// Add public string Heading { get; set; } in GigformViewModel
+/// in GigForm.cshtml add <h1>@Model.Heading</h1> on top of page
+/// Set the Heading in GigsController -> Create action: Heading = "Create a Gig" Edit action: Heading = "Edit a Gig" + Build
+
+////// Problem of the Title of the Tab(page) /////////
+/// in GigForm.cshtml -> ViewBag.Title = Model.Heading;
+
+//////////// Updating Data: Implement the Update operation //////////////////
+/// We are gonna create a new action call Update for this task.
+/// in GigForm.cshtml we have Html.BeginForm("Create"...) but if we editing a gig we want a different action to be called: Update
+/// So we want this to be dynamic. Use the same technic we used to render the heading for the page
+/// replace @using (Html.BeginForm("Create", "Gigs")) 
+///    with @using (Html.BeginForm(@Model.Action, "Gigs"))
+/// Alt+Enter on Action to create this prop in GigFormViewModel 
+/// in 'get' method of this new prop => if this is the new Gig then we return "Create" else return "Edit"
+/// How do we know if it is a new Gig on not => We need another prop here called id.
+/// in GigformViewModel:
+	public int Id { get; set; }
+        .
+		.
+		.
+	public string Action 
+	{
+		get { return (Id != 0) ? "Update" : "Create"; }
+	}
+/// but we have magic string here: if in the future we rename our action, this code is gonna break. We fix that later during refactoring.
+/// Now we have Id prop that shoud be render in for as a hidden field, So when we post a form, we know which gig we are modifying.
+/// in Gigform.cshtml -> After AntiForgeryToken -> put: @Html.HiddenFor(m => m.Id)  : we can put it anywhere
+/// Now we need to Create the Update action
+
+///////////// Create Update Action ////////////////
+/// The Update action is very similar to Create action.
+/// GigController -> Ctrl+F12 -> type Create -> select second one -> select all(Ctrl+w) -> Ctrl+d to duplicate. -> rename it to Update
+/// replace "Create" with "Gigform" in both actions
+/// if ModelState is valid => instead of creating a gig and add it to our DbSet, we are gonna pull out the existing gig and modify its prop:
+	[Authorize]
+	[HttpPost]
+	[ValidateAntiForgeryToken]
+	public ActionResult Update(GigFormViewModel viewModel)
+	{
+		if (!ModelState.IsValid)
+		{
+			viewModel.Genres = _context.Genres.ToList();
+			return View("GigForm", viewModel);
+		}
+
+		var currentUserId = User.Identity.GetUserId();
+		var gig = _context.Gigs.Single(g => g.Id == viewModel.Id && g.ArtistId == currentUserId);
+		gig.Venue = viewModel.Venue;
+		gig.DateTime = viewModel.GetDateTime();
+		gig.GenreId = viewModel.Genre;
+
+		_context.SaveChanges();
+
+		return RedirectToAction("Mine", "Gigs");
+	}
+ /// Compare it to Create action to see the differences for yourself.
+66. Complete Update a gig for an artist.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
