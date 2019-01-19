@@ -868,6 +868,24 @@ public string Action
 68. Using Expressions to Replace Magic Strings and complete Update operation.
 
 
+///////////////////////////////////// 3. Basic CRUD: Implementing the Delete ///////////////////////////////////////////////////
+/// We implement logical delete. We dont physically delete a record. We just flag them as deleted.
+/// For 2 reasons: 1. Prevent multiple cascade path problem 2. Potentially give the user the ability to undo things.
+
+////////// Extending the Domain //////////////
+/// Go to Gig.cs -> add bool IsCanceled prop -> Add-Migration AddIsCancelledToGig -> Update-Database
+/// Pay attention to choose a word: because in reality the artist does not delete a gig. They cancel a gig.
+/// So always think about the language of the domain you are working on.
+/// We dont delete things, we cancel them, reject them, decline them, return them
+69. add bool IsCanceled prop to Gig.cs
+
+
+
+
+
+
+
+
 
 
 
