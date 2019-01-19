@@ -357,7 +357,7 @@
 /// Pay attention to only create enought of the model to solve the problem at hand.
 /// The Problem(we are trying to solve): Keeping track of the gigs the user might be attending.
 /// Solution : simple association btw User and Gig => many to many relationship
-/// We need 3rd table name Attendance but we add this manually: becasue we need to query that directry
+/// We need 3rd table name Attendance but we add this manually: because we need to query that directry
 /// Add Attendance.cs to project  ApplicstionUser Attendee, string AttendeeId, Gig Gid, int GigId
 /// We need a composite primary key (AttendeeId, GigId) : decorate both with [Key]
 /// Specify order for primary key : decorate both with [Column(Order = 1)], [Column(Order = 2)]
@@ -378,7 +378,7 @@
 
 /////// Building the UI: Add Button at the right bottom of each Gig ////////
 /// When user click on btn, bg-color of btn change from white to blue and also add corresponding gig to the calendar.
-/// To implement this, we are gonna use Ajax becasue we dont want to a full page reload. So on the server we create a lightweight API.
+/// To implement this, we are gonna use Ajax because we dont want to a full page reload. So on the server we create a lightweight API.
 /// Create /api/attendances with HTTPPOST (because POST is more common. We'll need to include some data in the request body : gigId, Not UserId!
 /// the UserId (id of currently logged in user) should be calculated on the server. Because if we add userId to Ajax, it open the security holes!
 /// Malicious user pass other user's Id to API using a loop. This is messing with the whole system!
@@ -417,7 +417,7 @@
 /// Click Send -> See html respond : Authentication is not working => Authorize tag navigate us to login page(home/index)
 /// ERROR: if not set [FromBody] for gigId in Api, get this error: "Message": "The requested resource does not support http method 'POST'."
 /// ERROR: if not Login : status 200 OK but get HTML in the result which should not have happend! 
-/// we can see: <title> Log in - ... in html becasue the authentication is not working and the api is redirecting me to the login page
+/// we can see: <title> Log in - ... in html because the authentication is not working and the api is redirecting me to the login page
 /// ERROR : "Message": "The request entity's media type 'text/plain' is not supported for this resource.", => We missed the header 
 /// SOLUTION: click Header(0) -> in Header: type Content-Type and in Value: application/json
 /// When Post request in Api is working: The body of respont is empty and STATUS: 200 OK
@@ -676,7 +676,7 @@
 /// Go to GigController -> Ctrl+F12 -> type Create -> select all(Ctrl+w) -> Ctrl+d to duplicate. -> rename it to Edit
 /// Define a parameter for id of the gig:(int id) 
 /// We do not have to permit anyone can edit any gig. Only the user that create his own gig shoud be permitted to edit that.
-/// The code var gig = _context.Gigs.Single(g => g.Id == id); have a security hole. becasue anyone can pass a gig id to edit.
+/// The code var gig = _context.Gigs.Single(g => g.Id == id); have a security hole. because anyone can pass a gig id to edit.
 /// So we need a second condition: && g.ArtistId == currentUserId
 /// Next we need to initialize viewModel
 /// We can reuse the view Create to pass viewModel. So Create name for this view is not a good name anymore. We will change it.
@@ -778,6 +778,18 @@
  /// Compare it to Create action to see the differences for yourself.
 66. Complete Update a gig for an artist.
 
+///////// Testing the Update ////////////
+/// We edit a gig and click Save. but we have a big Problem: We have 2 gigs instead! It was not updated.
+/// Reason: Our action was not selected properly. Instead of Update action being called, Create action was called.
+/// Source of problem: because in Action prop of GigformViewModel, Id is set to 0 and that is why Create action called
+	public string Action 
+	{
+		get { return (Id != 0) ? "Update" : "Create"; }
+	}
+/// Because we forgot to initialize the Id prop 
+/// In Edit action, when we initialize the viewModel, we didn't set the Id property. So by default it is zero => target action always is Create
+/// Solution: GigsController -> Edit action : viewModel initialize : add Id = gig.Id
+67. Solving the problem of duplicating a gig instead of updating.
 
 
 

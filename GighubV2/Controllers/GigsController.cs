@@ -78,7 +78,8 @@ namespace GighubV2.Controllers
                 Time = gig.DateTime.ToString("HH:mm"),
                 Genre = gig.GenreId,
                 Genres = _context.Genres.ToList(),
-                Heading = "Edit a Gig"
+                Heading = "Edit a Gig",
+                Id = gig.Id
             };
 
             return View("GigForm", viewModel);
