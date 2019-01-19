@@ -791,14 +791,81 @@
 /// Solution: GigsController -> Edit action : viewModel initialize : add Id = gig.Id
 67. Solving the problem of duplicating a gig instead of updating.
 
+////////////// Using Expressions to Replace Magic Strings ////////////////////
+/// We have magic string here: 
+public string Action 
+	{
+		get { return (Id != 0) ? "Update" : "Create"; }
+	}
+/// Magic Strings are very fragile.
+/// if in the future we rename our actions above("Update" or "Create"), this code is gonna break. We fix that later during refactoring.
+/// instead we are gonna replace them with Lambda Expressions
+/// So we wanna have an expression that represent the update method
+/// with the Lambda Expressions: if I rename the Update or Create methoods, my Lambda Expression will get updated automatically
+/// Step by Step:
+public string Action 
+	{
+		get 
+		{
+			var update = (c => c.Update());
+		}
+	}
+/// 'c => c.Update()' is an anonymous method, so we can use Func Delegate to represent that. => change var to Func<GigsController>
+/// what does this method(c => c.Update()) represent? When we call c.Update() or the Update action, we will get the ActionResult
+/// So we put an ActionResult as the second parameter of Func => Func<GigsController, ActionResult> update = (c => c.Update())
+/// Just a tiny problem: the Update action expects a viewmodel, so give 'this' => Func<GigsController, ActionResult> update = (c => c.Update(this))
+/// So to Review: 
+/// This Lambda Expression [ c => c.Update() ] represent a method that takes c as an argument and returns an ActionResult
+/// in C# we can use Func<> which is a Delegate to represent that.
+/// So the first argument is the input to that anonymous method which in this case is GigsController
+/// And the second argument is the return type. In this case: ActionResult.
 
+/// Func<> which is a Delegate allows us to call this anonymous method but we dont wanna call this!
+/// We just wanna represent it as an expression. So we are gonna change the type to 'Expression':
+		Expression<Func<GigsController, ActionResult>> update = (c => c.Update(this));
 
+/// So we have the expression that represent the Update action(method) in the GigsController
+/// We do something similar with the Create action:
+		Expression<Func<GigsController, ActionResult>> create = (c => c.Create(this));
 
+/// Depending the value of the Id, we are gonna select one of this expressions and from there, we will get the method name at runtime:
+		var action = (Id != 0) ? update : create;      
+/// this means that if Id is not zero, select update expression else select create expression
+/// So action variable here is also an expression. So with this expressions, we will extract the method name at runtime:
+		
+		var actionName = (action.Body as MethodCallExpression).Method.Name;
 
+        return actionName;
 
+/// in the code above: first we get action.Body: we need to cast this to MethodCallExpression because this expression represent 
+/// a method call like Create or Update
+/// Now from a MethodCallExpression we can access to the method property and then Name and finally return actionName instead of 
+/// hardcoding Create and Update
 
+/// Final look of Action property is like below:
+	
+	public string Action 
+	{
+		get
+		{
+			Expression<Func<GigsController, ActionResult>> update = (c => c.Update(this));
+			
+			Expression<Func<GigsController, ActionResult>> create = (c => c.Create(this));
 
+			var action = (Id != 0) ? update : create;
 
+			var actionName = (action.Body as MethodCallExpression).Method.Name;
+
+			return actionName;
+		}
+	}
+
+/// Summary of Update Operation Module :
+/// Implementing th Update was reasonably simple because it was very similar to the Add operation.
+/// Notice that earlier in Add we did all the hard work there: 
+/// Create Form, Building the domain-model, Upgrading the database, Implementing validation, security and usability.
+/// Suggestion: Focus on the Core UseCases first! instead of implementing a full CRUD functionality as one slice
+68. Using Expressions to Replace Magic Strings and complete Update operation.
 
 
 
