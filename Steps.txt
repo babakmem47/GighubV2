@@ -378,9 +378,9 @@
 
 /////// Building the UI: Add Button at the right bottom of each Gig ////////
 /// When user click on btn, bg-color of btn change from white to blue and also add corresponding gig to the calendar.
-/// To implement this, we are gonna use Ajax because we dont want to a full page reload. So on the server we create a lightweight API.
+/// To implement this, we are gonna use AJAX because we dont want to a full page reload. So on the server we create a lightweight API.
 /// Create /api/attendances with HTTPPOST (because POST is more common. We'll need to include some data in the request body : gigId, Not UserId!
-/// the UserId (id of currently logged in user) should be calculated on the server. Because if we add userId to Ajax, it open the security holes!
+/// the UserId (id of currently logged in user) should be calculated on the server. Because if we add userId to AJAX, it open the security holes!
 /// Malicious user pass other user's Id to API using a loop. This is messing with the whole system!
 
 /////// Building the API /////////
@@ -448,30 +448,30 @@
 /// Write some JS at the bottom of index.cshtml
 /// Remember: What we put here will be rendered AFTER all js libraries like jquery or bootstrap
 /// We need an identifier for our button: Define a new class(a marker) for the buttton: use js-toggle-attendance to mark the button.
-/// Make ajax call for clicking btn: use jquery 'post' method.
-/// Ajax post method: 1st argument: URL of api. 2nd arg: data we want to send in the request body which shoud be the 'gigId'
+/// Make AJAX call for clicking btn: use jquery 'post' method.
+/// AJAX post method: 1st argument: URL of api. 2nd arg: data we want to send in the request body which shoud be the 'gigId'
 
 ////// Where do we get gigId? /////////
 /// We need to add it to the button as a data attribute : <button data-gig-id="@gig.Id" ...
 /// To use it: Put 'e'(represent event) in the arg of click function for button. 
 /// From event we could get the source of the event which is the button
-/// use $(e.target) as the second parameter for post method of Ajax to 
+/// use $(e.target) as the second parameter for post method of AJAX to 
 /// $(e.target) : gives the source of event
 /// e.target alone : return full html of button on the console
 /// Test: $(button).click(function(e) { console.log(e.target) });						=> give me a whole <button> tag! in console
 /// Test:								console.log($(e.target).attr("data-gig-id")		=> give the id of gig that we click!
-/// Ajax post method with these two parameter, post to api and return a promise. So we can chain the done and fail methods to handle success and error senarios.
+/// AJAX post method with these two parameter, post to api and return a promise. So we can chain the done and fail methods to handle success and error senarios.
 /// Chaining allows us to run multiple jQuery methods (on the same element) within a single statement.
 /// Use .done chain method if the call of api is successfull and do operation within it.
 /// if Api call is successfull: Change the lable and Background-Color of Button use chain method .removeClass("btn-default").addClass("btn-info").text("Going");
 /// Not testing it yet!
-56. Write JS at the end of index.cshtml and add Ajax call for /api/attendance. if success, change btn css else alert.
+56. Write JS at the end of index.cshtml and add AJAX call for /api/attendance. if success, change btn css else alert.
 
-/// A MISTAKE: in ajax call, Controller cannot bind recieved value to the gigId parameter: ASP.net expect the request from the body ([FromBody])
-/// In order to bind these two value, we need to put ajax parameter to 'object literal': {"key" : "value"}
+/// A MISTAKE: in AJAX call, Controller cannot bind recieved value to the gigId parameter: ASP.net expect the request from the body ([FromBody])
+/// In order to bind these two value, we need to put AJAX parameter to 'object literal': {"key" : "value"}
 /// change $.post("/api/attendances", button.attr("data-gig-id")) --> $.post("/api/attendances", { "" : button.attr("data-gig-id") })
 
-////////// Cleaner way to bind data parameter in ajax to gigId parameter in Api Controller HttpPost Action //////////
+////////// Cleaner way to bind data parameter in AJAX to gigId parameter in Api Controller HttpPost Action //////////
 /// The reason for we having this problem is because we have a scalar parameter in AttendancesController: int gigId
 /// if we put this in a complex type like an object, then we won't need [FromBody] anymore and in our JS, we can replace this "" with gigId as a Key.
 /// in JS: replace empty string "" with 'gigId' : now it look likes { gigId: button.attr("data-gig-id") }
@@ -485,7 +485,7 @@
 /// Reason: We already have an attendance for this gig for the current user.
 /// For other gigs it works! Hurra
 /// Ideally when we render a list of gigs, a 'Going' buttons should be in the state that provide user information: blue if user already registers attending to each gig. Do in the future.
-57. Replace Ajax second param with key:value. Use DTO object to communicate between JS code(Ajax) and API. Now the button 'Going?' works.
+57. Replace AJAX second param with key:value. Use DTO object to communicate between JS code(AJAX) and API. Now the button 'Going?' works.
 /// Summary: Try to implement a usecase with the simple model to solve the problem at hand. nothing more! Do not attempt to model the universe!
 /// At each steps, focus only one aspect of development => it has two advantages: 1. you will be more productive 2. you can write better code
 
@@ -516,7 +516,7 @@
 /// 6. Add-Migration AddFollowing
 /// 7. Add an Api : FollowingsController with an action Follow(FollowingDto dto)
 /// 8. Add FollowingDto.cs with prop: string ArtistId
-/// 9. Change Index.cshtml: in front of each Artist name, add a button btn-link. Add JS for button link with ajax(similar to attendance)
+/// 9. Change Index.cshtml: in front of each Artist name, add a button btn-link. Add JS for button link with AJAX(similar to attendance)
 58. Implement Follow an artist(9 steps)
 
 ////////////////////// Hiding Actions(Follow and Going) from Anonymous Users /////////////////////////
@@ -868,6 +868,7 @@ public string Action
 68. Using Expressions to Replace Magic Strings and complete Update operation.
 
 
+
 ///////////////////////////////////// 3. Basic CRUD: Implementing the Delete ///////////////////////////////////////////////////
 /// We implement logical delete. We dont physically delete a record. We just flag them as deleted.
 /// For 2 reasons: 1. Prevent multiple cascade path problem 2. Potentially give the user the ability to undo things.
@@ -881,10 +882,118 @@ public string Action
 
 //////////// Building an API /////////////////
 /// We're gonna use a mechanism similar to what we dit when Implementing follow an artist or attend a Gig
-/// Put a link next to Edit link an call it Cancel. When user click it, we're gonna use Ajax to call the server.
-/// Use Ajax: because we don't want to do a full page reload
+/// Put a link next to Edit link an call it Cancel. When user click it, we're gonna use AJAX to call the server.
+/// Use AJAX: because we don't want to do a full page reload
 /// So first we need an API:
 /// Solution Explorer -> Controllers -> Create new folder name Api -> R-click -> Add -> Web Api 2 Controller -> name it GigsController
+/// Decorate GigsController wit [Authorize] because only authenticated artists can cancel their gigs.
+/// Create an action:  public IHttpActionResult Cancel(int id) : Notice that the parameter is integer not dto (for now)
+/// Make sure to decorate it with [HttpDelete] 
+		[HttpDelete]
+        public IHttpActionResult CancelGig(int id)
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == currentUserId);
+            gig.IsCanceled = true;
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+////////////// Consuming the API using jQuery AJAX ////////////////
+/// Go to Mine.cshtml -> after Edit link -  | a[href="#"] ->  <a class="js-cancel-gig" data-gig-id="@gig.Id" href="#">Cancel</a>
+/// At the bottom of Mine.cshtml:
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+                $(".js-cancel-gig").click(function(e) {
+                    var link = $(e.target);
+                    console.log(link.attr("data-gig-id"));
+
+                    if (confirm("Are you sure you want to delete this gig?")) {
+                        $.ajax({
+                            url: "/api/gigs/" + link.attr("data-gig-id"),
+                            method: "DELETE"
+                            })
+                            .done(function () {
+                                link.parents("li").fadeOut(function() {
+                                    $(this).remove();											: 'this' now is the <li>
+                                });
+                                console.log("gig canceled and removed from the list");
+                            })
+                            .fail(function () {
+                                console.log("something failed");
+                            });
+                    }
+                });
+        });
+
+    </script>
+}
+
+/////////// Using BootBox Dialog ////////////
+/// Confirm box is very boring
+/// Go to bootboxjs.com -> Download -> copy bootbox.min.js into /Scripts folder -> R-Click on Scripts -> Add Existing item... ...
+/// Next we need to add this script to our bundle -> BundleConfig.cs -> near bootstrap.js: "~/Scripts/bootbox.min.js",
+/// In Mine.cshtml -> paste the piece of code from examples in bootboxjs.com and add:
+	bootbox.confirm("Are you sure you want to delete this gig?", function (result) {
+		if(result) {		
+			/// paste all ajax code here
+		}	
+	});
+/// Now we can delete if(confirm).. block
+/// Note: It is important to check the result with if block because if we not use if block, all the code will be executed wheather 
+/// we click Cancel or OK.
+
+///////////// Improving the Usability of Dialogs ///////////////
+/// Problem: Message ask "Are you sure you want to delete this gig? and we have Cancel button here!
+/// Another problem: Color of Primary Button: It shoud be red to get warning to the user, because the operation is dangerous
+/// We need to use the dialog method to be able to customize the lable and color of the buttons.
+
+////// Excluding logically deleted object from Queries /////////
+/// GigsController(MVC Controller) -> Mine action -> add condition: && !g.IsCanceled
+/// Do similar change for HomeController -> add condition::  .Where(gg =>  !gg.IsCanceled);
+/// Alternatively we could still show them here but display the 'Canceled' flag and perhaps give the user the ability to undo that.
+
+///////// Using Bootstrap Lables //////////
+/// When click on the link "Gigs I'm Going" it show a list of gigs that the login users attending in their calendar.
+/// Question: What shoud happen if artists cancel one or more of these gigs in this page? Shoul they disappear from this page?
+/// Answer: No. It is not the good thing in term of usability. It's better to show the canceled gigs here and highlight to 
+/// the user that they are canceled.
+///// Add a Bootstrap Lable next to Canceled Gigs //////
+/// Go to GigsController(MVC) -> Attending action -> in this action we're using the Gigs view. 
+/// Modify this view (Gigs) and add a lable next to canceled gigs.
+/// Go to Gigs.cshtml -> under @gig.Artist.Name -> add the code below:
+		@if (gig.IsCanceled)
+		{
+			<span class="label label-warning">Canceled</span>
+		}
+/// Also it is better to hide "Going" button because it does'nt make sense anymore.
+/// Add a condition: && !gig.IsCanceled in the block code below:
+		@if (Model.ShowActions && !gig.IsCanceled)
+		{
+			<button data-gig-id="@gig.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going ?</button>
+		}
+
+/////////// Handling Edge Cases ///////////////
+/// the Cancel method in our API should behave like it really delete a gig from database. 
+/// This means that if the user click Cancel button for the second time, it should return an error telling that no resource
+/// with the given id exist.
+/// Go to GigsController(Api) -> put the code below:
+		if (gig.IsCanceled)
+            return NotFound();
+
+/////// Move API Controllers to Api folder /////////
+/// Open the Controller -> on the name of it -> Ctrl+SHIFT+R -> Move to Folder
+
+/// Summary /////
+/// Good thing about logical delete: Allow you to Report on Historical data and Undo things.
+/// In your app, consider logical delete when it make sanse
+/// Logical delete is good but not for every scenario. There are times that you should physically delete the record from the database.
+
+
+
 
 
 

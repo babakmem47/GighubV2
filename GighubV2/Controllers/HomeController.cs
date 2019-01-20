@@ -1,6 +1,8 @@
-﻿using GighubV2.Models;
+﻿using System;
+using GighubV2.Models;
 using GighubV2.ViewModels;
 using System.Data.Entity;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace GighubV2.Controllers
@@ -23,8 +25,8 @@ namespace GighubV2.Controllers
         {
             var upcomingGigs = _context.Gigs
                 .Include(gg => gg.Artist)
-                .Include(gg => gg.Genre);
-            //                .Where(gg => gg.DateTime > DateTime.Now);
+                .Include(gg => gg.Genre)
+                .Where(gg =>  !gg.IsCanceled);
 
             var viewModel = new GigsViewModel
             {

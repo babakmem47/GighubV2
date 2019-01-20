@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity;
 using System.Linq;
 using System.Web.Http;
 
-namespace GighubV2.Controllers
+namespace GighubV2.Controllers.Api
 {
     [Authorize]
     public class FollowingsController : ApiController

@@ -169,8 +169,8 @@ select.form-control {
 .gigs > li .details {
     position: absolute;
     top: 0;
-    left: 100px;
-    min-width: 150px;
+    left: 80px;
+    min-width: 190px;
 }
 
     .gigs > li .details .artist {
@@ -189,4 +189,8 @@ select.form-control {
 
 .gigs > li:hover .action {
     display: block;
+}
+
+.btn-sm {
+    line-height: 1;
 }
