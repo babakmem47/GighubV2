@@ -8,9 +8,12 @@ namespace GighubV2.Models
 
         public DateTime DateTime { get; set; }
 
-        public DateTime OriginalDateTime { get; set; }
+        public NotificationType Type { get; set; }
+
+        public DateTime? OriginalDateTime { get; set; }
 
         public string OriginalValue { get; set; }
 
+        public Gig Gig { get; set; }
     }
 }
