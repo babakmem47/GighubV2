@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GighubV2.Models;
+using GighubV2.ViewModels;
+using GighubV2.ViewModels.AspNetAuth;
 
 namespace GighubV2.Controllers
 {

@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GighubV2.Models
+namespace GighubV2.ViewModels.AspNetAuth
 {
-    public class ForgotPasswordViewModel
+    public class ForgotViewModel
     {
         [Required]
-        [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }

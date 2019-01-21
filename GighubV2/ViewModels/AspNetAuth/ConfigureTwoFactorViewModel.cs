@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace GighubV2.ViewModels
+namespace GighubV2.ViewModels.AspNetAuth
 {
-    public class SendCodeViewModel
+    public class ConfigureTwoFactorViewModel
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
-        public string ReturnUrl { get; set; }
-        public bool RememberMe { get; set; }
     }
 }

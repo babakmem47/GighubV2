@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GighubV2.ViewModels
+namespace GighubV2.ViewModels.AspNetAuth
 {
-    public class RegisterViewModel
+    public class ResetPasswordViewModel
     {
-        [Required]
-        [StringLength(100)]
-        public string Name { get; set; }
-
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -23,5 +19,7 @@ namespace GighubV2.ViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string Code { get; set; }
     }
 }

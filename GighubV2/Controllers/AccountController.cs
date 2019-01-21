@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using GighubV2.ViewModels;
+using GighubV2.ViewModels.AspNetAuth;
 
 namespace GighubV2.Controllers
 {
