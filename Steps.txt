@@ -289,7 +289,7 @@
 
 
 ////////////////////////////////////////////// 11. Extending ASP.NET Identity Users//////////////////////////////////////////////////////////
-/////// Fill Home page with the list of upcomig Gigs ///////////
+/////// Fill Home page with the list of upcoming Gigs ///////////
 /// Read from database all upcoming gigs and show it in /home/index
 /// Be Careful: Not define _context readonly!
 /// In Index Action of Home Controller, read all gigs from database using Include (for reading artist too). Send list to Index View.
@@ -615,7 +615,7 @@
 ///////////////////////////////////// 1. Basic CRUD: Implementing the Read ///////////////////////////////////////////////////
 ////////// Implement My Upcoming Gigs (as an Artist) ////////////////
 /// First we need an Action: In Gig Controller, create an action: Mine 
-/// Decorate this action with [Authorize]: Only authenticated artist can access this to view his/her upcomig gigs.
+/// Decorate this action with [Authorize]: Only authenticated artist can access this to view his/her upcoming gigs.
 	public ActionResult Mine()
 	{
 		var currentUserId = User.Identity.GetUserId();
@@ -994,20 +994,126 @@ public string Action
 
 
 
+///////////////////////////////////// 4. Avoiding Pitfalls in Domain Models ///////////////////////////////////////////////////
+/// One of the challenges of software development is the constant changes in the requirements 
+/// That is not in the original requirements document
+/// they told us WHEN A GIG IS UPDATED OR CANCELLED, WE NEED TO NOTIFY THOSE USERS WHO ARE GOING TO THAT GIG.
+
+/// you should always start with a domain model.
+/// start by examining the requirements in detail
+/// the user should be notified when a gig is cancelled or its details such as the date, time or the venue, are changed
+/// also nofity the followers of the artists about their new upcoming gigs
+
+/// think of a domain model for fulfilling this use case
+/// Sketch a class diagram on a piece of paper
+
+//////////// First Attempt: A Simple Design ////////////////////////
+/// we have a Notification class that has three attributes(DateTime, Message, IsRead) Many-to-One with Gig and User classes
+
+				Notification.cs
+				-------------
+				DateTime	- * ------> 1 Gig.cs
+				Message		-
+				IsRead		- * ------> 1 User.cs
+				-------------
+				
+/// we can generate a message and store it in the message property.
+/// Problem: What if you want to add a link below the artist name that would take the user to the artist's profile?   ArtistId is not available
+/// Bad thinking: message is a string, so we can store HTML there and persist it in the database
+/// Problem of this: if in the future we decide to change our URLs or the language of our notifications, we'll have to 
+/// modify the data in our database. And parsing and processing strings in database is often hard and time consuming.
+
+/// Experiment: in a legacy design, during one of the upgrades because one of the URLs had to be changed, It took nearly 7 hours!!
+
+/// Do not have string message in your model
+/// Store data about what has happened in a structured format
+
+/// Problem of First Attempt Design: In update we need both the previous DateTime and new DateTime and it's possible 
+/// that the artist may change the venue, so we may need two more properties
 
 
+//////////// Second Attempt: Using Inheritance ////////////////////////
+/// make this notification class abstract and only include properties that are shared across all notifications and then we can 
+/// derive sub-classes like gig updated notification, gig canceled notification and so on
+/// This is misusing inheritance
+/// YOU SHOULD NOT USE INHERITANCE FOR REUSING PROPERTIES!
+/// Inheritance should be used for inheritant behavior and logic
+/// inheritance increases the complexity and coupling in your design 
+/// our notification class is a simple data structure and It has no behavior 
+
+//////////// Third Attempt: Collapsing the Hierarchy ////////////////////////
+/// push the properties of gig updated notification into its base class:
+
+				Notification.cs						NotificationType
+				--------------------				-----------------
+				DateTime							GigUpdated
+													GigCanceled
+				IsRead: bool						GigCreated
+													-----------------
+				OriginalDateTime		
+				
+				OriginalVenue
+				--------------------
+/// OriginalDateTime & OriginalVenue are nullable so if a gig is updated, we'll set them
+/// but what if in the future we going to have many other different notification types
+/// and each of them will need their own attributes?   
+/// => this notification class is going to be bloated with too many attributes
+/// Immediate Response: what if that will not happen?
+/// shall we go ahead and design a model that will fulfill all these scenarios?  NO!
+/// DO ENOUGH DESIGN TO SOLVE TODAY'S PROBLEMS IN AN OUTSTANDING WAY
 
 
+//////////// An Alternative Design ////////////////////////
+				Notification.cs		    1 ------------- *	NotificationAttribute.cs				
+				---------------------						------------------------
+				DateTime									Name
+				IsRead: bool								Value
+				OriginalDateTime							------------------------
+				OriginalVenue
+				---------------------
+/// if we're going to support different notifications, we can take out this
+/// OriginalDateTime & OriginalVenue props here and capture attributes in a generic way.
+/// we can add a class here called notification attribute that has two properties: Name & Value
+/// here we're using composition instead of inheritance 
+/// with this model, we can capture any notification with any number of attributes with only 2 classes.
+/// But again for now it will add extra complexity without providing any value
+/// So we're going to stick to our current design and keep things simple.
 
 
+//////////// Fourth Attempt: Using an Association Class ////////////////////////
+
+		Gig.cs  1 --------------- *		Notification.cs		    		* ------------------ *				User.cs				
+										---------------------			   UserNotification					--------
+										DateTime						   ------------------		
+	NotificationType 1 ---------- *		OriginalDateTime				   IsRead : bool	  
+										OriginalVenue					   ------------------											
+										---------------------				
+
+/// if a gig is cancelled and we have a thousand people attending that gig, we'll have to create a thousand 
+/// notification records in the database with all these properties. So with this duplication, we're going to waste some disk space.
+/// So change the association between Notification and User from Many-to-One to Many-to-Many
 
 
-
-
-
-
-
-
+/////////////////////////// Implementing Domain Classes  /////////////////////////////////
+/// In the above model , we already have the user and gig classes. 
+/// So we need to add three new types: NotificationType, Notification & UserNotification
+/// 1. We start with NotificationType because that's the simplest; it's simply an enumeration and has no dependency on any other types.
+/// 2. we'll Implement Notification 
+/// 3.finally we'll implement UserNotification
+ 
+/// Create new class: R-Click on Models -> create NotificationType.cs -> change class to enum -> give each of these members an explicit value
+/// Because these values are going to be stored in the database and if in the future I add another member to this enum, I want to make sure 
+/// the value of existing members are not changed.
+namespace GighubV2.Models
+{
+    public enum NotificationType
+    {
+        GigCanceled = 1,
+        GigUpdated = 2,
+        GigCreated = 3
+    }
+}
+/// 
 
 
 
