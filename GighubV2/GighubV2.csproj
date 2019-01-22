@@ -181,7 +181,9 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Dtos\AttendanceDto.cs" />
     <Compile Include="Dtos\FollowingDto.cs" />
+    <Compile Include="EntityConfiguration\ApplicationUserConfiguration.cs" />
     <Compile Include="EntityConfiguration\AttendanceConfiguration.cs" />
+    <Compile Include="EntityConfiguration\UserNotificationConfiguration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -221,6 +223,14 @@
     <Compile Include="Migrations\201901191936386_AddIsCanceledToGig.Designer.cs">
       <DependentUpon>201901191936386_AddIsCanceledToGig.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901220532505_AddNotification.cs" />
+    <Compile Include="Migrations\201901220532505_AddNotification.Designer.cs">
+      <DependentUpon>201901220532505_AddNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901220547333_SetCascadeDeleteFalseForUserNotification.cs" />
+    <Compile Include="Migrations\201901220547333_SetCascadeDeleteFalseForUserNotification.Designer.cs">
+      <DependentUpon>201901220547333_SetCascadeDeleteFalseForUserNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
     <Compile Include="Models\Following.cs" />
@@ -230,6 +240,7 @@
     <Compile Include="Models\Gig.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\UserNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AspNetAuth\AddPhoneNumberViewModel.cs" />
@@ -351,6 +362,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901191936386_AddIsCanceledToGig.resx">
       <DependentUpon>201901191936386_AddIsCanceledToGig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901220532505_AddNotification.resx">
+      <DependentUpon>201901220532505_AddNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901220547333_SetCascadeDeleteFalseForUserNotification.resx">
+      <DependentUpon>201901220547333_SetCascadeDeleteFalseForUserNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

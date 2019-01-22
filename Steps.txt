@@ -1112,8 +1112,69 @@ namespace GighubV2.Models
         GigUpdated = 2,
         GigCreated = 3
     }
-}
-/// 
+	public class Notification
+    {
+        public int Id { get; set; }
+        public DateTime DateTime { get; set; }
+        public NotificationType Type { get; set; }
+        public DateTime? OriginalDateTime { get; set; }
+        public string OriginalValue { get; set; }
+		
+		[required]
+        public Gig Gig { get; set; }
+    }
+/// Note that original date time is a nullable date time
+/// Each notification is for one, and only one gig
+	public class UserNotification
+    {
+        public ApplicationUser User { get; set; }
+
+        [Key]
+        [Column(Order = 1)]
+        public string UserId { get; set; }
+
+        public Notification Notification { get; set; }
+         
+        [Key]
+        [Column(Order = 2)]
+        public int NotificationId { get; set; }
+
+        public bool IsRead { get; set; }
+    }
+////////////////////// Migration the Database ///////////////////////
+/// We need to add two <DbSet> to our DB context
+/// Go to ApplicationDbContext and add:
+		public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+/// Add-Migration
+/// Note that CascadeDelete for UserId is True. In SQLServer we can check that in this way:
+/// R-click on UserNotification table -> Design -> R-click on UserId -> Relationship... -> expand INSERT And UPDATE Specific -> Delete Rule: Cascade
+/// Set CascadeDelete to False between User and UserNotification
+/// Create:
+	public class UserNotificationConfiguration : EntityTypeConfiguration<UserNotification>
+    {
+        public UserNotificationConfiguration()
+        {
+            HasRequired(un => un.User)
+                .WithMany()
+                .HasForeignKey(un => un.UserId)
+                .WillCascadeOnDelete(false);
+        }
+    }
+
+//// Set this line below in Adbc:
+    modelBuilder.Configurations.Add(new UserNotificationConfiguration());
+/// Add-Migration SetCascadeDeleteFalseForUserNotification
+/// Check in SQLServer: Delete Rule: No Action
+70. Implementing Domain Class Of Notification.
+
+
+
+
+
+
+
+
 
 
 
