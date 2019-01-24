@@ -1168,10 +1168,27 @@ namespace GighubV2.Models
 /// Check in SQLServer: Delete Rule: No Action
 70. Implementing Domain Class Of Notification.
 
+////////////////// Storing Notification /////////////////////
+/// Now when a gig is cancelled, I want to send a notification to all users that are going to attend that gig
+/// GigsController(Api) -> Cancel action -> When the gid is canceled, we want to send a notification.
+/// First lets create a notification(After gig.IsCanceled = True;):
+		var notification = new Notification
+		{
+			DateTime = DateTime.Now,
+			Gig = gig,
+			Type = NotificationType.GigCanceled
+		};
+/// Next, we need to get all users that are going to attend this gig.
+		var attendees = _context.Attendances.Where(a => a.GigId == gig.Id)
 
+/// This query returns attendance objects, but what I want is a list of application user objects.
+/// So from the attendance, we need to select its application user:
+			var attendees = _context.Attendances
+                .Where(a => a.GigId == gig.Id)
+                .Select(a => a.Attendee)
+                .ToList();
 
-
-
+/// 				
 
 
 
