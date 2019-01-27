@@ -1188,9 +1188,176 @@ namespace GighubV2.Models
                 .Select(a => a.Attendee)
                 .ToList();
 
-/// 				
+/// Now for each attendee we need to create a user notification object:
+			foreach (var attendee in attendees)
+            {
+                var userNotification = new UserNotification
+                {
+                    User = attendee,
+                    Notification = notification
+                };
+				_context.UserNotifications.Add(userNotification);
+            }
+/// And the last step is to add this object to our context. So entity framework tracks this as a new object and 
+/// adds it to the database with this command: _context.UserNotifications.Add(userNotification);
+
+/// Summary: 
+/// Use UML diagrams purely as a temporary communication tool for understanding the problem and the solution
+/// Not spend too much time creating class diagrams for documentation.
+/// It is the complete waste of time to create all sorts of UML diagrams before coding, to keep my diagrams in sync with the source code.
+/// The ultimate documentation is your source code.
+/// Source code should be so clean and self-explanatory
+/// It is best to avoid Inheritance and use composition. Because inheritance increases coupling in your application.
+/// At this point we have a simple and, honestly ugly implementation for sending notifications!
+/// When a gig is canceled, our cancel action is way too long.
+/// In the next module, we're going to do step-by-step refactoring and move towards a more object-oriented design
+/// You will see the cancel action being much shorter and much cleaner.
 
 
+///////////////////////////////////// 5. Refactoring Towards an Object Oriented Design /////////////////////////////////////////////////
+/// Common Issue in many MVC Projects: Anaemic Domain Model : a domain model with no behavior no methods no logic. Just a bunch of prop banks.
+/// As your application grows, the logic around the domain model will end up somewhere else : mostly in controllers or services.
+/// This makes your controllers or services FAT, unmaintainable, and hard to unit test.
+/// So we'll refactor GigsController Api by extracting the domain logic and pushing it into our domain model
+/// which will result in a behavior-rich domain model, better separation of concerns and improve maintainability and testability.
+
+/// Go to GigsController Api:
+/// The first thing we want to refactor is the foreach block here:
+			foreach (var attendee in attendees)
+            {
+                var userNotification = new UserNotification
+                {
+                    User = attendee,
+                    Notification = notification
+                };
+				_context.UserNotifications.Add(userNotification);
+            }
+/// Instead of these few lines, we would just call the 'Notify' method and pass this notification object like below: 
+			foreach (var attendee in attendees)
+            {
+                attendee.Notify(notification);
+			}
+/// Then inside this method, the application user class would wrap this notification inside a user notification object and set user to this(attendee)
+/// and next, it will add this user notification to its internal collection called UserNotifications.
+/// Look at the code above. It is cleaner and more meaningful. We're simply delegating to the domain
+/// Create this method with Resharper: Alt+Enter -> Enter, Enter Enter Enter. Copy the code from Controller inside this method:
+/// Replace 'attendee' with 'this' because we are inside the ApplicationUser class 
+/// We should not have _context in our ApplicationUser class. 
+/// Context is about infrastructure. It's about persistence. It should not be inside our domain classes.
+/// We want a domain model that is persistent ignorant. It knows nothing about persistence. It's just an object-oriented model of the world.
+/// There is another way to achieve the same thing without using context: 
+/// If in the ApplicationUser class, we had a navigation property called UserNotifications, we could add this userNotification object to this collection
+/// and it would have the exact same effect: Entity Framework will treat this as a new object 
+/// and when you called Save Changes, it will create a record in the database
+/// Create this Navigation Property:
+/// Go to top of ApplicationUser class, we already have 2 navigation property: Followers and Followees. So add another one:
+        public ICollection<UserNotification> UserNotifications  { get; set; }
+/// and initialize it in the Constructor: UserNotifications = new Collection<UserNotification>();
+/// and now the Notify method is like below:
+	public void Notify(Notification notification)
+	{
+		var userNotification = new UserNotification
+		{
+			User = this,
+			Notification = notification
+		};
+		UserNotifications.Add(userNotification);
+	}
+
+////////////// Refactoring Ensuring Valid Object ///////////////
+///	We have an important, but hidden problem here
+/// UserNotification is the association class between User and Notification classes so it should always reference 
+/// an existing user and a notification object. User property or Notification property here cannot be null
+/// But with our current implementation, We can create a UserNotification like this:
+		var x = new UserNotification();    => x.User and x.Notification are both null!!
+/// This is the problem: Our UserNotification object can go in an invalid state and that's where things go wrong!
+/// That's where we get null reference exceptions and all kinds of weird bugs.
+/// So we want a domain model that protects its state.
+/// Fix this problem:
+/// put the cursor here on UserNotification -> Ctrl+B -> create a constructor in UserNotification.cs
+/// Create 2 parameters: user and notification -> Alt+Enter -> second options in Resharper: Initialize auto-property...
+		public UserNotification(ApplicationUser user, Notification notification)
+        {
+            User = user;
+            Notification = notification;
+        }
+/// But we are halfway done. Before setting these properties, we want to make sure that these arguments are not null.
+/// So add a this below condition to the begining of the above code:
+		if (user == null)
+			throw new  ArgumentNullException("user");
+
+		if (notification == null)
+			throw new ArgumentNullException("notification");
+/// when you create custom constructors, you should always create a default constructor
+/// So create ctor with no arguments but change it to protected so nowhere in the code we will use this but 
+/// it's still available for Entity Framework at runtime.
+/// Our constructor in UserNotification.cs is like below:
+	protected UserNotification()
+	{
+	}
+
+	public UserNotification(ApplicationUser user, Notification notification)
+	{
+		if (user == null)
+			throw new  ArgumentNullException("user");
+
+		if (notification == null)
+			throw new ArgumentNullException("notification");
+
+		User = user;
+		Notification = notification;
+	}
+/// but there is still a problem in this class: the problem is the setter for the User and Notification properties.
+/// These setters allow me to set these properties after they are initialized, but it doesn't make sense
+/// I should not be able to change one end of the relationship because UserNotification is conceptually a different relationship.
+/// So make the set; of these properties private:
+		public ApplicationUser User { get; private set; }
+		public Notification Notification { get; private set; }
+
+/// With these simple changes, we can make sure that this user notification is always in a valid state.
+/// Go back to ApplicationUser.cs -> instead of initializing User and Notification, pass 'this' and 'notification' as a parameter:
+	public void Notify(Notification notification)
+	{
+		var userNotification = new UserNotification(this, notification);        
+
+		UserNotifications.Add(userNotification);
+	}
+/// We can also change the code above to one line UserNotifications.Add(new UserNotification(this, notification));
+
+///////////////// Refactoring Initialization Of Notification object //////////////////
+/// look at this code:
+			var notification = new Notification
+            {
+                DateTime = DateTime.Now,
+                Gig = gig,
+                Type = NotificationType.GigCanceled
+            };
+/// We have the same issue with Notification class: we can use var x = new Notification(); command to allow Gig prop to be null!
+/// We don't need to set DateTime to Now here. This is the responsibility of a constructor of Notification
+/// Go to Notification.cs and add:		
+		protected Notification()
+        {            
+        }
+
+        public Notification(Gig gig, NotificationType type)
+        {
+            if (gig == null)
+                throw new ArgumentNullException();
+            
+            DateTime = DateTime.Now;
+            Gig = gig;
+            Type = type;
+        }
+/// The DateTime of a notification is not an attribute that I'm going to present to the user in a form for them to modify.
+/// So I want to make sure this class protects its state. So for this reason, We decorate some of these properties with private set:
+		public int Id { get; private set; } 				: technically, we should not be able to change the key of objects once they're created
+        public DateTime DateTime {get; private set; }
+        public NotificationType Type { get; private set; }	: It doesn't make sense to Cancel a gig and - somewhere else in the code, say no, it was Update!
+		public Gig Gig { get; private set; }				: it cannot be changed once it's set
+
+/// For now we are not touch 2 properties: OriginalDateTime and OriginalVenue because we are not working on them for now.
+/// when we send notifications when gigs are updated, we can come back and revisit these properties.
+/// Now we can go back to GigsController and simplify the initialization of the notification
 
 
 

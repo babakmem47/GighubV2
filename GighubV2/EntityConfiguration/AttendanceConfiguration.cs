@@ -10,7 +10,7 @@ namespace GighubV2.EntityConfiguration
 
             //// Many-To-One with Gig ////
             HasRequired(a => a.Gig)
-                .WithMany()
+                .WithMany(g => g.Attendances)
                 .WillCascadeOnDelete(false);
         }
     }

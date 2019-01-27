@@ -1,5 +1,5 @@
-﻿using System.Data.Entity.ModelConfiguration;
-using GighubV2.Models;
+﻿using GighubV2.Models;
+using System.Data.Entity.ModelConfiguration;
 
 namespace GighubV2.EntityConfiguration
 {
@@ -8,7 +8,7 @@ namespace GighubV2.EntityConfiguration
         public UserNotificationConfiguration()
         {
             HasRequired(un => un.User)
-                .WithMany()
+                .WithMany(n => n.UserNotifications)
                 .HasForeignKey(un => un.UserId)
                 .WillCascadeOnDelete(false);
         }
