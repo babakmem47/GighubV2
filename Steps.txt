@@ -1358,8 +1358,211 @@ namespace GighubV2.Models
 /// For now we are not touch 2 properties: OriginalDateTime and OriginalVenue because we are not working on them for now.
 /// when we send notifications when gigs are updated, we can come back and revisit these properties.
 /// Now we can go back to GigsController and simplify the initialization of the notification
+		var notification = new Notification(gig, NotificationType.GigCanceled);
 
+/// You see our action is getting cleaner and cleaner.
+/// So we make a couple of minor modifications to the UserNotification class as well: 
+/// Already in this class we set the setter of the User and Notification property to private
+/// Do the same for fore keys too:
+		public string UserId { get; private set; }
+        public int NotificationId { get; private set; }
+		
+////////////////////// Optimization Linq Query for Attendees //////////////////////		
+/// We are querying the database to get attendances for the given gig:
+		var attendees = _context.Attendances
+			.Where(a => a.GigId == gig.Id)
+			.Select(a => a.Attendee)
+			.ToList();
 
+/// But also, on top of this action, we have another query to get the given gig: 
+		var gig = _context.Gigs.Single(g => g.Id == id && g.ArtistId == currentUserId);
+
+/// So here we are doing two round trips to the database and both of these are about a particular gig
+/// A better way is to use eager loading. So we get the gig and all of its attendances.
+/// Then we won't need these few lines for querying and we can make this action shorter.
+/// Change the code which is in the beginnig of Cancel action like below:
+/// Create Attecdances navigation prop into Gig.cs to be able to Eager Load in the code below:
+		var gig = _context.Gigs
+			.Include(g => g.Attendances)  -> Alt+Enter to create it in Gig.cs
+			.Single(g => g.Id == id && g.ArtistId == currentUserId);
+			
+/// this create a property like below in Gig.cs:
+		public ICollection<Attendance> Attendances { get; set; }
+		
+/// And we need to initialize it in the Constructor because it is a collection:
+		public Gig()
+        {
+            Attendances = new Collection<Attendance>();
+        }
+
+/// Also, now that you are familiar with the concept of objects being in a valid state, We have to change the setter of this collection to private set:
+	public ICollection<Attendance> Attendances { get; private set; }
+
+/// because once its initialized, I want to make sure nowhere else in the code, I accidentally overwrite it with another collection.
+/// We can add objects to this collection, remove objects from it, but we shouldn't be able to overwrite the whole collection with another collection.
+/// So until now we have this code:
+		var gig = _context.Gigs
+			.Include(g => g.Attendances)
+
+/// but what we want is attendee not just the attendance, so we need to include that as part of our eager load.
+/// Here's the tricky part. This attendance is here as a collection, so I cannot type Attendances.Attendee
+/// Attendee is not a property of collections
+/// So the trick is to use the Select method: 
+		var gig = _context.Gigs
+			.Include(g => g.Attendances.Select(a => a.Attendee))
+			.Single(g => g.Id == id && g.ArtistId == currentUserId);
+
+/// And delete the query for initializing attendees variable:
+		var attendees = _context.Attendances
+			.Where(a => a.GigId == gig.Id)
+			.Select(a => a.Attendee)
+			.ToList();
+
+/// The action is getting shorter.
+/// And replace attendees variable with 'gig.Attendances.Select(a => a.Attendee)' in foreach block like below:
+		foreach (var attendee in gig.Attendances.Select(a => a.Attendee))
+		{
+			attendee.Notify(notification);                
+		}
+
+//////////////////////////// Refactoring Cohesion /////////////////////////////
+/// Cohesion: basically means things that are highly related should be together. You cannot, and you should not separate them.
+/// Let's read the story of the Cancel action.
+/// 1. first we are trying to find the gig for the given Id.
+/// 2. If the gig is cancelled, will return NotFound. 
+/// 3. Otherwise, gig set IsCanceled to true,
+/// 4. Send a notification to all attendees of that gig
+/// 5. Save Changes.
+/// So this is the story that this action is telling us.
+/// Step 3 to 5 are highly cohesive 
+/// When you cancel a gig, you should also send notification to all attendees
+/// More interestingly, all these lines are about changing the state of the domain.
+/// The controller should not be involved in details of changing the state of the domain. It should simply delegate.
+/// We saw an example of this at the beginning when we implemented the Notify method.
+/// We are going to use the same technique and encapsulate these few lines inside a method called Cancel. Something like this: gig.Cancel();
+/// gig.Cancel(); -> Alt+Enter to create this method -> cut these few line(until SaveChanges) in Controller and paste it in new method.
+/// put the cursor on gig.(which is red) -> Alt+Enter -> last option 'Change all local gig' -> this
+/// 'this' is grayed out because it's really not required. So let's get rid of it: 
+		public void Cancel()
+        {
+            IsCanceled = true;
+
+            var notification = new Notification(this, NotificationType.GigCanceled);
+            
+            foreach (var attendee in Attendances.Select(a => a.Attendee))
+            {
+                attendee.Notify(notification);
+            }
+           
+        }
+
+/// Now that we have implemented the Cancel method, we should not be able to set IsCanceled from outside this class.
+/// because this would put our object in an invalid state.
+/// So make the setter of GigCanceled private:
+        public bool IsCanceled { get; private set; }
+
+/// By the way, we are not finished here. These three lines are about querying:
+			var gig = _context.Gigs
+                .Include(g => g.Attendances.Select(a => a.Attendee))
+                .Single(g => g.Id == id && g.ArtistId == currentUserId);
+/// and it's not the responsibility of the controller to query the database.            
+/// Later, in section about the repository pattern, we will encapsulate these lines inside a repository, 
+/// and we will reduce these 3 lines to just 1 line.
+
+//////////////// Fixing the Issue with Reverse Relationship //////////////
+/// When running the application after these changes, We get an error.
+/// Entity Framework thinks our model is changed whereas it hasn't
+/// change model means if we execute add-migration, we should get a migration.
+/// So we can test it with Add-Migration Foo and delete it after.
+/// It is not empty:
+		public override void Up()
+        {
+            AddColumn("dbo.Attendances", "Gig_Id", c => c.Int());
+            AddColumn("dbo.UserNotifications", "ApplicationUser_Id", c => c.String(maxLength: 128));
+            CreateIndex("dbo.Attendances", "Gig_Id");
+            CreateIndex("dbo.UserNotifications", "ApplicationUser_Id");
+            AddForeignKey("dbo.Attendances", "Gig_Id", "dbo.Gigs", "Id");
+            AddForeignKey("dbo.UserNotifications", "ApplicationUser_Id", "dbo.AspNetUsers", "Id");
+        }
+/// Because earlier in one of the videos, we added a navigation property to the gig class called Attendances.
+/// So Entity Framework thinks this is a new property or a new relationship, whereas it isn't.
+/// It's simply the reverse relationship between Attendance and Gig.
+/// When we create Attecdance.cs, we create navigation prop: public Gig Gig { get; set; }
+/// But at that time, we did not create reverse relationship from Gig.cs to Attecdance.cs
+/// We added that later, and Entity Framework, at the moment cannot see these two relationships being related.
+/// That's why it thinks the model is changed and it wants to add a new column in the database.
+/// So when something like this happens in your applications that means something is wrong in the configuration of the relationship within your classes.
+/// Go to AttendanceConfiguration.cs:
+	public class AttendanceConfiguration : EntityTypeConfiguration<Attendance>
+    {
+        public AttendanceConfiguration()
+        {
+            //// Many-To-One with Gig ////
+            HasRequired(a => a.Gig)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+        }
+    }
+/// and each Gig has many what? We didn't specify that here. 
+/// replace it with: .WithMany(g => g.Attendances)
+/// So open up the Foo migration again. So we looked at the first problem but the second one is the same as first.
+/// It tries to add a column called ApplicationUser_Id and UserNotifications table, and this is exactly for the same reason.
+/// This happened because in one of our recent refactoring, in the User class, in the ApplicationUser class, we added 
+/// a property called UserNotifications 
+        public ICollection<UserNotification> UserNotifications { get; set; }
+		
+///and this simply represents the reverse relationship between the UserNotification and ApplicationUser,
+/// but Entity Framework cannot see this at the moment.
+/// Go to UserNotificationConfiguration:
+	public class UserNotificationConfiguration : EntityTypeConfiguration<UserNotification>
+    {
+        public UserNotificationConfiguration()
+        {
+            HasRequired(un => un.User)
+                .WithMany()
+                .HasForeignKey(un => un.UserId)
+                .WillCascadeOnDelete(false);
+        }
+    }
+/// replace .WithMany() with:
+                .WithMany(n => n.UserNotifications)
+
+/// Go to Package manager -> Add-Migration Foo -Force -> All dissapear!! There is nothing here
+/// So Go to Solution Explorer -> Delete Foo Migration
+71. Storing Notification & Optimization of Cancelation of a Gig.
+
+/////////////////////// Implementing Notification When a Gig Is Updated ///////////////////////
+/// Gigs controller -> Update action -> 
+/// Add this below Include method to eager load the gig with all its attendances and attendees
+                .Include(g => g.Attendances.Select(a => a.Attendee))
+
+///Create 'Modify' method:
+            gig.Modify(viewModel.GetDateTime(), viewModel.Venue, viewModel.Genre);
+/// First parameter is updated DateTime!
+/// this method is not too bad(3 parameters), but if the Gig class had many more properties, 
+/// it would be code smell to create a method that takes, let's say 10 parameters!
+/// In that case, a better implementation would be to have only one parameter in the Modify method
+/// which is of type Gig, but has all the updated properties.
+/// Modify method is like this:
+		public void Modify(DateTime getDateTime, string viewModelVenue, int viewModelGenre)
+        {
+            var notification = new Notification(this, NotificationType.GigUpdated);
+            notification.OriginalDateTime = DateTime;
+            notification.OriginalValue = Venue;
+
+            this.DateTime = getDateTime;			///
+            this.Venue = viewModelVenue;			///  Update the gig in this 3 lines
+            this.GenreId = viewModelGenre;			///
+
+            foreach (var attendee in Attendances.Select(a => a.Attendee))
+            {
+                attendee.Notify(notification);
+            }
+        }
+/// We set two properties OriginalDateTime and OriginalVenue before updating the gig
+/// This way, We can keep track of the original values
+/// finally, We iterate over the attendees for this gig and notify them.
+72. Implementing Notification When a Gig Is Updated.
 
 
 

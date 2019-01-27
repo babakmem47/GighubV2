@@ -40,12 +40,28 @@ namespace GighubV2.Models
             IsCanceled = true;
 
             var notification = new Notification(this, NotificationType.GigCanceled);
-            
+
             foreach (var attendee in Attendances.Select(a => a.Attendee))
             {
                 attendee.Notify(notification);
             }
-           
+
+        }
+
+        public void Modify(DateTime getDateTime, string viewModelVenue, int viewModelGenre)
+        {
+            var notification = new Notification(this, NotificationType.GigUpdated);
+            notification.OriginalDateTime = DateTime;
+            notification.OriginalValue = Venue;
+
+            this.DateTime = getDateTime;
+            this.Venue = viewModelVenue;
+            this.GenreId = viewModelGenre;
+
+            foreach (var attendee in Attendances.Select(a => a.Attendee))
+            {
+                attendee.Notify(notification);
+            }
         }
     }
 }
