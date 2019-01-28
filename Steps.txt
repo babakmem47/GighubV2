@@ -1626,6 +1626,179 @@ namespace GighubV2.Models
 /// Replace new Notification with: 	var notification = Notification.GigUpdated(this, DateTime, Venue);
 									var notification = Notification.GigCanceled(this);
 								
+73. Use Factory methods "GigCreated, GigUpdated and GigCanceled" to protect the state of the objects.
+
+
+////////////////////////////////// 6. Mapping Domain Objects to DTOs //////////////////////////////////////
+/// We're going to build an API which will be called to get the notifications 
+/// for the currently logged-in user
+
+///////////////// Building an API //////////////////
+/// GET   /api/notifications     : need this endpoint
+/// 1. Build this API	2. Call ut using jQuery 	3. Get the data 	4. render it on the client.
+/// R-click on Controller/Api folder -> Add Controller... -> choose Web API 2 Controller -Empty -> Add
+/// name it NotificationsController -> decorate with [Authorize]
+/// We need a list of notifications for the currently logged-in user
+
+		public IEnumerable<Notification> GetNewNotifications()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var notifications = _context.UserNotifications
+                .Where(un => un.UserId == currentUserId)
+                .Select(un => un.Notification)
+                .Include(n => n.Gig.Artist)
+                .ToList();
+
+            return notifications;
+        }
+
+/// Test the above API with Postman. OK.
+/// We are exposing so much information to the outside world!
+/// So, as a best practice, we should not expose our domain objects from our API
+/// because domain objects are the internals of your application
+/// Instead, we should return DTOs
+/// These are the contracts for our API.
+/// So all the input or output to the API should be DTOs, not domain objects.
+
+////////////// Introducing DTOs //////////////
+/// 1. Change IEnumerable<Notification> -> IEnumerable<NotificationDto> -> create with Alt+Enter
+/// -> Move NotificationDto.cs it to Dtos folder
+/// copy all the properties from the Notification class into this class, and then get rid of the ones
+/// that we don't want to return to the client
+/// Id prop deleted because we do not need to send it to the client. This is for the internal of app
+/// Remove Annotation because we are not going to do validation on this DTO
+/// change Gig to GigDto -> create with Alt+Enter -> copy all the properties from Gig to it
+/// Id of Gig, which is useful because, potentially, we may want to add a link to a page where 
+/// the user can see the details of the gig.
+	
+	public class NotificationDto
+    {
+        public DateTime DateTime { get; private set; }
+        public NotificationType Type { get; private set; }
+        public DateTime? OriginalDateTime { get; private set; }
+        public string OriginalValue { get; private set; }
+        public GigDto Gig { get; private set; }
+
+    }
+    public class GigDto
+    {
+        public int Id { get; set; }
+        public bool IsCanceled { get; private set; }
+        public ApplicationUserDto Artist { get; set; }
+        public DateTime DateTime { get; set; }
+        public string Venue { get; set; }
+        public GenreDto Genre { get; set; }
+
+    }
+    public class GenreDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class ApplicationUserDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
+/// map Notification to NotificationDto:
+/// Imagine the .Select method takes a Notification object and returns a NotificationDto.
+		[HttpGet]
+        public IEnumerable<NotificationDto> GetNewNotifications()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var notifications = _context.UserNotifications
+                .Where(un => un.UserId == currentUserId)
+                .Select(un => un.Notification)
+                .Include(n => n.Gig.Artist)
+                .Include(n => n.Gig.Genre)
+                .ToList();
+
+            return notifications.Select(n => new NotificationDto
+            {
+                Gig = new GigDto
+                {
+                    Id = n.Gig.Id,
+                    Artist = new ApplicationUserDto
+                    {
+                        Id = n.Gig.Artist.Id,
+                        Name = n.Gig.Artist.Name
+                    },
+                    DateTime = n.Gig.DateTime,
+                    IsCanceled = n.Gig.IsCanceled,
+                    Genre = new GenreDto
+                    {
+                        Name = n.Gig.Genre.Name
+                    },
+                    Venue = n.Gig.Venue
+                },
+                DateTime = n.DateTime,
+                OriginalDateTime = n.OriginalDateTime,
+                OriginalValue = n.OriginalValue,
+                Type = n.Type
+            });
+        }
+
+/// now, look at the result. Our Notification object is now much more lightweight
+/// It doesn't expose all those details about the domain.
+
+/////////////// Using Automapper ////////////////
+/// This mapping code is very noisy and redundant
+/// Look at the names on the right and left side: It's very redundant!
+/// AutoMapper is a convention-based mapping tool
+/// We tell AutoMapper to map a source type to a target type
+/// AutoMapper uses reflection to map individual properties of the source type to the target type.
+
+//////// Install AutoMapper ////////
+/// 1. PM> Install-Package AutoMapper -Version:4.1  (newer version cause error in PM)
+/// 2. in NotificationsController:
+/// After .ToList(); Add:
+		
+            Mapper.CreateMap<Genre, GenreDto>();
+            Mapper.CreateMap<ApplicationUser, ApplicationUserDto>();
+            Mapper.CreateMap<Gig, GigDto>();
+            Mapper.CreateMap<Notification, NotificationDto>();
+
+            return notifications.Select(Mapper.Map<Notification, NotificationDto>);
+
+//////// Organizing AutoMapper Mapping ////////
+/// We don't want to repeat these CreateMap statements(4 above lines) whenever we want to use
+/// AutoMapper to map domain model to dto or vice versa.
+/// We want to have a single place to store all mappings for AutoMapper.
+/// More importantly, if I want to override these mappings or overriding the default conventions
+/// we do it in one place
+/// Refactoring: Organizing Automapper configuration:
+/// 1. Solution Explorer -> R-Click App_Start -> Add Class... -> name it MappingProfile : Profile
+namespace GighubV2.App_Start
+{
+    public class MappingProfile : Profile
+    {
+        public MappingProfile()
+        {
+            Mapper.CreateMap<Genre, GenreDto>();
+            Mapper.CreateMap<ApplicationUser, ApplicationUserDto>();
+            Mapper.CreateMap<Gig, GigDto>();
+            Mapper.CreateMap<Notification, NotificationDto>();
+        }
+    }
+}
+/// Finally, we need to tell AutoMapper that we have a profile called MappingProfile:
+/// 2. Global.asax -> use Mapper.Initialize() method:
+            Mapper.Initialize(c => c.AddProfile<MappingProfile>());
+
+/// This method takes an action of iConfiguration
+
+//////////// Using Camel Notation /////////////
+/// properties returned from our API using Pascal naming convention
+/// But we are going to use this data on the client side in JavaScript
+/// And in JavaScript, it's ugly to use Pascal case
+////// configure Web API to return data using CamelCase notation ////
+/// go to WebApiConfig.cs -> 
+			var settings = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings;
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            settings.Formatting = Formatting.Indented;
+			
+/// Build -> Refresh Postman -> Beautiful!
 
 
 

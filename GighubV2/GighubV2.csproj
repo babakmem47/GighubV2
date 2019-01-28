@@ -39,6 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.1.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -168,6 +172,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\MappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -175,12 +180,17 @@
     <Compile Include="Controllers\Api\AttendancesController.cs" />
     <Compile Include="Controllers\Api\FollowingsController.cs" />
     <Compile Include="Controllers\Api\GigsController.cs" />
+    <Compile Include="Controllers\Api\NotificationsController.cs" />
     <Compile Include="Controllers\Follow.cs" />
     <Compile Include="Controllers\GigsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Dtos\ApplicationUserDto.cs" />
     <Compile Include="Dtos\AttendanceDto.cs" />
     <Compile Include="Dtos\FollowingDto.cs" />
+    <Compile Include="Dtos\GenreDto.cs" />
+    <Compile Include="Dtos\GigDto.cs" />
+    <Compile Include="Dtos\NotificationDto.cs" />
     <Compile Include="EntityConfiguration\ApplicationUserConfiguration.cs" />
     <Compile Include="EntityConfiguration\AttendanceConfiguration.cs" />
     <Compile Include="EntityConfiguration\UserNotificationConfiguration.cs" />
@@ -230,6 +240,10 @@
     <Compile Include="Migrations\201901220547333_SetCascadeDeleteFalseForUserNotification.cs" />
     <Compile Include="Migrations\201901220547333_SetCascadeDeleteFalseForUserNotification.Designer.cs">
       <DependentUpon>201901220547333_SetCascadeDeleteFalseForUserNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901281013469_MakeGigPropRequiredInNotification.cs" />
+    <Compile Include="Migrations\201901281013469_MakeGigPropRequiredInNotification.Designer.cs">
+      <DependentUpon>201901281013469_MakeGigPropRequiredInNotification.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
@@ -368,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901220547333_SetCascadeDeleteFalseForUserNotification.resx">
       <DependentUpon>201901220547333_SetCascadeDeleteFalseForUserNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901281013469_MakeGigPropRequiredInNotification.resx">
+      <DependentUpon>201901281013469_MakeGigPropRequiredInNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
