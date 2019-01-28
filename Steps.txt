@@ -1564,6 +1564,73 @@ namespace GighubV2.Models
 /// finally, We iterate over the attendees for this gig and notify them.
 72. Implementing Notification When a Gig Is Updated.
 
+////////////////// Using Factory Method to Create Objects /////////////////
+/// So this implementation is working but there's a hidden problem here:
+			var notification = new Notification(this, NotificationType.GigUpdated);
+            notification.OriginalDateTime = DateTime;
+            notification.OriginalValue = Venue;
+/// With this implementation, it's possible that as a programmer forget to write these two lines.
+/// And with this, our notification would be an invalid state.
+/// So that's how problems happen! Our objects go in the wrong state,
+/// They start to lie to the world, and things go wrong
+/// This constructor here, in case of gigs being updated, it's not very helpful
+/// There is a better and cleaner way to solve this problem: 
+						use simple FACTORY METHODS			
+/// A factory method is responsible for creating an object in a valid state.
+/// go to Notification.cs -> make ctor private
+/// because I don't want anywhere in the code to use this constructor anymore, 
+/// because it can create objects in an invalid state.
+/// in Notification.cs -> Create static method:
+/// this factory method is responsible for creating a notification for a gig that was just created.
+/// What parameter do we need here: The gig that was just created 
+/// this factory method will call that private constructor that we already have
+
+		public static Notification GigCreated(Gig gig)
+        {
+            return new Notification(gig, NotificationType.GigCreated);
+        }
+		
+/// Duplicate the method above and rename it to GigUpdated
+/// When a gig is updated, what do we need?
+/// We need a reference to the new gig and the value of the OriginalDateTime and OriginalVenue
+/// Then, before returning, set these two prop to make sure that this notification 
+/// is always in a valid state:
+
+		public static Notification GigUpdated(Gig newGig, DateTime originalDateTime, string originalVenue)
+        {
+            var notification = new Notification(newGig, NotificationType.GigUpdated);
+            notification.OriginalDateTime = originalDateTime;
+            notification.OriginalValue = originalVenue;
+
+            return notification;
+        }
+/// Here this method has three parameters
+/// For now it is OK
+/// A cleaner implementation is to have only two parameters here, newGig, and OldGig 
+
+/// Finally another factory method for GigCanceled:
+		public static Notification GigCanceled(Gig gig)
+        {
+            return new Notification(gig, NotificationType.GigCanceled);
+        }
+
+/// Just one more step: in Notification.cs -> make setter of originalDateTime and originalVenue private.
+/// We need to make them read only. So it can only be set if we use the right factory method.
+		public DateTime? OriginalDateTime { get; private set; }
+        public string OriginalValue { get; private set; }
+		
+/// with this, Notification is an immutable object which makes perfect sense, because Notification
+/// is not something that the user is going to change. It's for the internal of the system
+
+/// back to Gig.cs:
+/// Replace new Notification with: 	var notification = Notification.GigUpdated(this, DateTime, Venue);
+									var notification = Notification.GigCanceled(this);
+								
+
+
+
+
+
 
 
 
