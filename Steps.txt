@@ -80,7 +80,7 @@
 
 /////////////// Separation of concern : Responsibility of Controller and View ////////////
 /// Controller not responsible for parsing string value into DateTime object.  
-/// Controller shoud act as a coordinator for application logic: WHAT SHOULD HAPPEN NEXT! 
+/// Controller should act as a coordinator for application logic: WHAT SHOULD HAPPEN NEXT! 
 /// Controller is like a manager. Not do the actual work. 
 /// Information Expert Principle: Class/Object that has the information to do sth, should be the one  
 /// that will carry that responsibility. So the viewModel is the class that knows about Date and Time!
@@ -272,7 +272,7 @@
 /// Add placeholder to Date and Time: @Html.TextBoxFor(m => m.Date, new { @class = "form-control", placeholder = "eg 1 Jan 2019" })
 45. Add 'All Fields are required' lable of top of form + Put focus on the first field + Add watermark to Date and Time fields.
 
-/// Action: each form shoul have a primary action. It's bettter to avoud secondary action. Change 'Cancel' button bg-color to white or make it a link
+/// Action: each form should have a primary action. It's bettter to avoud secondary action. Change 'Cancel' button bg-color to white or make it a link
 /// Primary action should stand out. Align primary action with input fields. 
 
 /////////////////////////////////////// Validation //////////////////////////////////////////////
@@ -449,7 +449,7 @@
 /// Remember: What we put here will be rendered AFTER all js libraries like jquery or bootstrap
 /// We need an identifier for our button: Define a new class(a marker) for the buttton: use js-toggle-attendance to mark the button.
 /// Make AJAX call for clicking btn: use jquery 'post' method.
-/// AJAX post method: 1st argument: URL of api. 2nd arg: data we want to send in the request body which shoud be the 'gigId'
+/// AJAX post method: 1st argument: URL of api. 2nd arg: data we want to send in the request body which should be the 'gigId'
 
 ////// Where do we get gigId? /////////
 /// We need to add it to the button as a data attribute : <button data-gig-id="@gig.Id" ...
@@ -745,7 +745,7 @@
 		get { return (Id != 0) ? "Update" : "Create"; }
 	}
 /// but we have magic string here: if in the future we rename our action, this code is gonna break. We fix that later during refactoring.
-/// Now we have Id prop that shoud be render in for as a hidden field, So when we post a form, we know which gig we are modifying.
+/// Now we have Id prop that should be render in for as a hidden field, So when we post a form, we know which gig we are modifying.
 /// in Gigform.cshtml -> After AntiForgeryToken -> put: @Html.HiddenFor(m => m.Id)  : we can put it anywhere
 /// Now we need to Create the Update action
 
@@ -948,7 +948,7 @@ public string Action
 
 ///////////// Improving the Usability of Dialogs ///////////////
 /// Problem: Message ask "Are you sure you want to delete this gig? and we have Cancel button here!
-/// Another problem: Color of Primary Button: It shoud be red to get warning to the user, because the operation is dangerous
+/// Another problem: Color of Primary Button: It should be red to get warning to the user, because the operation is dangerous
 /// We need to use the dialog method to be able to customize the lable and color of the buttons.
 
 ////// Excluding logically deleted object from Queries /////////
@@ -958,7 +958,7 @@ public string Action
 
 ///////// Using Bootstrap Lables //////////
 /// When click on the link "Gigs I'm Going" it show a list of gigs that the login users attending in their calendar.
-/// Question: What shoud happen if artists cancel one or more of these gigs in this page? Shoul they disappear from this page?
+/// Question: What should happen if artists cancel one or more of these gigs in this page? Should they disappear from this page?
 /// Answer: No. It is not the good thing in term of usability. It's better to show the canceled gigs here and highlight to 
 /// the user that they are canceled.
 ///// Add a Bootstrap Lable next to Canceled Gigs //////
@@ -1800,7 +1800,12 @@ namespace GighubV2.App_Start
 			
 /// Build -> Refresh Postman -> Beautiful!
 
+////////// Correct the condition for API Notification action //////////
+                .Where(un => un.UserId == currentUserId)
+/// We should return only new notifications for the currently logged-in user:
+                .Where(un => un.UserId == currentUserId && !un.IsRead)
 
+74. Implementing Dtos and AutoMapper.
 
 
 
