@@ -62,6 +62,24 @@ span.field-validation-error {
     border-bottom-color: #fff;
 }
 
+.navbar-collapse .navbar-nav.navbar-right:last-child {
+    margin-right: -100px;
+}
+
+.navbar-collapse .navbar-nav.navbar-right .globeIcon {
+    position: relative;
+}
+
+.navbar-collapse .navbar-nav.navbar-right .badge {
+    position: absolute;
+    top: 8px;
+    right: -1px;
+    /*left: 20px;*/
+    /*background-color: rgb(184, 13, 13);*/
+    background: #a80a0a;
+    /*z-index: -1;*/
+}
+
 .navbar-brand {
     font-weight: 700;
 }

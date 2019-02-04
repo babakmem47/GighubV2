@@ -1808,6 +1808,32 @@ namespace GighubV2.App_Start
 74. Implementing Dtos and AutoMapper.
 
 
+///////////////////////// 7. Working with Bootstrap Icons Badges and Popovers////////////////////////////
+///// Add bootstrap Icon to Navigation Bar ///////////
+/// Go to _LoginPartial -> 
+					<li>
+                        <a href="#"><i class="glyphicon glyphicon-globe"></i></a >
+                    </li>
+/////// display the number of new notifications in a badge to the right side of our globe icon /////////
+/// Change as below:
+					<li class="globeIcon">
+                        <a href="#"><i class="glyphicon glyphicon-globe"></i></a >
+                        <span class="badge">2</span>
+                    </li>
+/// in Site.css:
+				.navbar-collapse .navbar-nav.navbar-right .globeIcon {
+					position: relative;
+				}
+
+				.navbar-collapse .navbar-nav.navbar-right .badge {
+					position: absolute;
+					top: 8px;
+					right: -1px;
+					background: #a80a0a;
+				}				
+					
+
+
 
 
 
