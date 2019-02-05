@@ -1861,9 +1861,21 @@ namespace GighubV2.App_Start
 	</script>
 
 75. Add bootstrap icon and badge for showing notifications count
-		
 
+//////////// Animating content with CSS ///////////
+/// animate badge ////
+/// 1. Search for animate css in google
+/// 2. Download animate.css and put it in Content folder.
+/// 3. Add it to BundleConfig.cs:
+			bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/bootstrap.css",
+                      "~/Content/animate.css",         <--- This line is inserted
+                      "~/Content/site.css"));
 
+/// 4. in jquery code, add 2 below class to badge:
+                    .removeClass("hide")
+					.addClass("animated bounceInDown");
+76. Animate badge for notifications count.
 
 
 
