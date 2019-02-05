@@ -42,8 +42,10 @@
 <script>
     $(document).ready(function() {
         $.getJSON("/api/notifications",
-            function(count) {
-                $(".badge".text = count);
+            function(notifications) {
+                $(".js-noticications-count")
+                    .text(notifications.length)
+                    .removeClass("hide");
             });
     });
 </script>

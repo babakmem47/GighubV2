@@ -1831,7 +1831,37 @@ namespace GighubV2.App_Start
 					right: -1px;
 					background: #a80a0a;
 				}				
-					
+
+//// replace this hard-coded number	with the actual number of notifications	coming from the server /////
+/// we need to call our API, get all the new notifications, and replace this number (2) here.
+/// 1. Give badge a new class to use this as a selector when writing jQuery code:
+	<span class="badge js-noticications-count"></span>
+	
+/// 2. Call the server and get the new notifications:
+/// here's the tricky part: There might be a bit of delay between the time we call the server and get 
+/// the number of new notifications. It may take half a second or more.
+/// and at that point, I don't want to display an empty badge
+/// a trick: use the Bootstrap hide class
+	<span class="badge js-noticications-count hide"></span>
+/// when we get the data from the server, we'll remove this class.
+
+/// Where should we write our jQuery code? => 
+/// LoginPartial, is a partial view and displays on Layout.cshmtl
+/// 3. Go to _Layout.cshmtl:
+/// Before </body> insert <script> tag:
+	<script>
+		$(document).ready(function() {
+			$.getJSON("/api/notifications",
+				function(notifications) {
+					$(".js-noticications-count")
+						.text(notifications.length)
+						.removeClass("hide");
+				});
+		});
+	</script>
+
+75. Add bootstrap icon and badge for showing notifications count
+		
 
 
 

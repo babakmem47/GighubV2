@@ -30,7 +30,6 @@ namespace GighubV2.Controllers.Api
                 .Include(n => n.Gig.Genre)
                 .ToList();
 
-
             return notifications.Select(Mapper.Map<Notification, NotificationDto>);
         }
     }

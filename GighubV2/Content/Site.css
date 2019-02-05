@@ -63,7 +63,7 @@ span.field-validation-error {
 }
 
 .navbar-collapse .navbar-nav.navbar-right:last-child {
-    margin-right: -100px;
+    margin-right: -50px;
 }
 
 .navbar-collapse .navbar-nav.navbar-right .globeIcon {
