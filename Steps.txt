@@ -1877,6 +1877,8 @@ namespace GighubV2.App_Start
 					.addClass("animated bounceInDown");
 76. Animate badge for notifications count.
 
+////////// Using Bootstrap Popovers ///////////////
+
 
 
 
