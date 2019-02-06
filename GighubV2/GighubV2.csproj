@@ -245,6 +245,10 @@
     <Compile Include="Migrations\201901281013469_MakeGigPropRequiredInNotification.Designer.cs">
       <DependentUpon>201901281013469_MakeGigPropRequiredInNotification.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902061117398_CorrectOriginalVenueFiledInNotificationClass.cs" />
+    <Compile Include="Migrations\201902061117398_CorrectOriginalVenueFiledInNotificationClass.Designer.cs">
+      <DependentUpon>201902061117398_CorrectOriginalVenueFiledInNotificationClass.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendance.cs" />
     <Compile Include="Models\Following.cs" />
@@ -387,6 +391,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901281013469_MakeGigPropRequiredInNotification.resx">
       <DependentUpon>201901281013469_MakeGigPropRequiredInNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902061117398_CorrectOriginalVenueFiledInNotificationClass.resx">
+      <DependentUpon>201902061117398_CorrectOriginalVenueFiledInNotificationClass.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

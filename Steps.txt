@@ -1931,12 +1931,66 @@ namespace GighubV2.App_Start
 /// Next, we need to replace this template with a markup for notifications
 77. Using Bootstrap Popovers and Adding Underscorejs.
 
+////// 07. Rendering Content Using Underscore Templates ///////
+/// We need to replace this template "Hello <%= name %>" with a markup for notifications
+/// We are not gonna write that markup here because that would violate separation of concerns
+/// 1. Set the script tag before earlier <script>
+    <script type="text/x-template" id="notifications-template"></script>
 
+/// Intention: make the browser ignore what we gonna do here 
+///which will be our template(combination of js & html)
 
+/// 2. Move(cut) 'Hello <%= name %>' from _.template to inside this new script tag 
+    <script type="text/x-template" id="notifications-template">
+        Hello <%= name %>
+    </script>
+/// 3. Use jQuery to get its's content.
+    var compiled = _.template($("#notifications-template").html());
 
+/// 4. Replace Hello <%= name %> with the actual markup for notifications
+	<script type="text/x-template" id="notifications-template">
+        <%
+            _.each(notifications, function(notification){
+                if(notification.type == 1) { %>
+                    <li>
+                        <%= notification.gig.artist.name %> has canceled the gig 
+						at <%= notification.gig.venue %> at <%= notification.gig.dateTime %>
+                    </li>
+                <% }
+            })
+        %>
+    </script>
 
+/// 5. Pass the right Json object:
+/// replace { name: "Babak" } with { notifications: notifications }
+/// First notifications is the filed of Json object(that what we referencing in our markup) 
+/// The second one is what we get from the server.
+/// We need to move popover code into GetJSON code block to access this variable:
+	<script>
+        $(document).ready(function () {
+            $.getJSON("/api/notifications",
+                function (notifications) {
+                    $(".js-noticications-count")
+                        .text(notifications.length)
+                        .removeClass("hide")
+                        .addClass("animated bounceInDown");
 
+                    $(".globeIcon").popover({
+                        html: "true",
+                        title: "Notifications",
+                        content: function () {
+                            var compiled = _.template($("#notifications-template").html());
+                            var html = compiled({ notifications: notifications });
+                            return html;
+                        },
+                        placement: "bottom"
+                    });
 
+                });
+        });
+    </script>
+
+78. Rendering Content Using Underscore Templates.
 
 
 
