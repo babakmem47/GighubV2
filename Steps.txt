@@ -1877,7 +1877,64 @@ namespace GighubV2.App_Start
 					.addClass("animated bounceInDown");
 76. Animate badge for notifications count.
 
-////////// Using Bootstrap Popovers ///////////////
+////////// 05. Using Bootstrap Popovers ///////////////
+/// When the user clicks this globe icon, we want to display a popover:
+		$(".globeIcon").popover({
+            html: "true",
+            title: "Notifications",
+            content: function() {
+                return "Hello world";
+            },
+            placement: "bottom"
+
+////////////// 06. Adding Underscorejs ////////////////
+/// We want to replace this hard-coded Hello World with the details of notifications coming from the server.
+/// The poor way is to write the HTML here, something like this:
+			content: function() {
+                return "<ul>"
+                    + "<li>" + "message of notifications.." + "</li>";
+            },
+
+/// as our markup gets more complex, maintaining this piece of code gets harder.
+/// Plus, this code does not have separation of concerns. We are writing HTML in the middle of JavaScript.
+/// A better way is to use a TEMPLATING ENGINE.
+/// templating engine: we have our markup somewhere, and we have placeholders.
+/// Then we can ask the templating engine to render the content based on some JSON object.
+/// just like how we render views in ASP.NET MVC. There, we have a templating engine called Razor.
+/// We have the same concept on the client side, in JavaScript.
+
+/// Underscore is a very useful library. We can get Underscore at underscorejs.org
+/// Add underscore-min.js into Scripts folder
+/// Add it to BundleConfig. here's the tricky part: 
+/// Underscore is an independent library. and it doesn't fall into any of these categories.
+/// for now, I'll just put Underscore under jquery, even though it's not jQuery 
+			bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/underscore-min.js"));
+
+/// Before rendering notifications, test it rendering something very simple using Underscorejs.
+/// to make sure my plumbing code is working before rendering complex markup:
+			var compiled = _.template("Hello <%= name %>");
+
+/// this template method will get the string and compile it into a function
+/// this compiled variable here is actually a function
+/// We call this function and supply a JSON object:
+			compiled({ name: "Babak" });
+			
+/// Now, this compiled function will replace the value of this placeholder with what we've got 
+/// here, which is Babak.
+/// Store the result in a variable called html and return it:
+			var html = compiled({ name: "Babak" });
+			
+/// Back to the browser, Refresh, Working!
+/// Underscore is in place, template is working.
+/// Next, we need to replace this template with a markup for notifications
+77. Using Bootstrap Popovers and Adding Underscorejs.
+
+
+
+
+
 
 
 

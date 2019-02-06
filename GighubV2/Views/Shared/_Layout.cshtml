@@ -48,6 +48,22 @@
                     .removeClass("hide")
                     .addClass("animated bounceInDown");
             });
+        $(".globeIcon").popover({
+            html: "true",
+            title: "Notifications",
+            content: function() {
+                var compiled = _.template("Hello <%= name %>");
+                var html = compiled({ name: "Mosh" });
+                return html;
+            },
+            placement: "bottom"
+
+            //title: "Notifications",
+            //content: "Hello World",
+            //placement: "bottom",
+            //trigger: "focus",
+            //delay: {show: 300, hide: 100}
+        });
     });
 </script>
 </body>
