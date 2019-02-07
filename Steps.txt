@@ -1992,7 +1992,32 @@ namespace GighubV2.App_Start
 
 78. Rendering Content Using Underscore Templates.
 
-
+//////////////// 08. Code Review //////////////////////
+/// Show Gig Updated Notification in Popover 
+/// Add below markup to .each loop after first if:
+				else if(notification.type == 2) {
+                   var changes = [],
+                       originalValue = [],
+                       newValues = [];
+                   if(notification.originalDateTime != notification.gig.dateTime) {
+                       changes.push("date/time");
+                       originalValue.push(notification.originalDateTime);
+                       newValues.push( notification.gig.dateTime);
+                   }
+        
+                   if(notification.originalVenue != notification.gig.venue) {
+                       changes.push("venue");
+                       originalValue.push(notification.originalVenue);
+                       newValues.push( notification.gig.venue);
+                   }
+                %>
+                    <li>
+                        <%= notification.gig.artist.name %> has changed the <%= changes.join(' and ') %> of the gig at <%= originalValue.join('/') %> to <%= newValues.join('/') %>
+                    </li>
+                <%
+                }
+				
+79. Show Gig Updated Notification in Popover
 
 
 

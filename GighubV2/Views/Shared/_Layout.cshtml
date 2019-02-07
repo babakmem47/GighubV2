@@ -39,7 +39,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-<script type="text/x-template" id="notifications-template">
+    <script type="text/x-template" id="notifications-template">
         <%
             _.each(notifications, function(notification){
                 if(notification.type == 1) { %>
@@ -47,21 +47,32 @@
                         <%= notification.gig.artist.name %> has canceled the gig at <%= notification.gig.venue %> at <%= notification.gig.dateTime %>
                     </li>
                 <% }
-                if(notification.type == 2) { %>
-                <li>
-                    <%= notification.gig.artist.name %> has updated the gig at <%= notification.gig.venue %> at <%= notification.gig.dateTime %>
-                </li>
-                <% }
-                else if(notification.type == 2) { 
-                    var changes = [],
-                        originalValue = [],
-                        newValues = [];
-                    
-    
-
+                
+                else if(notification.type == 2) {
+                   var changes = [],
+                       originalValue = [],
+                       newValues = [];
+                   if(notification.originalDateTime != notification.gig.dateTime) {
+                       changes.push("date/time");
+                       originalValue.push(notification.originalDateTime);
+                       newValues.push( notification.gig.dateTime);
+                   }
+        
+                   if(notification.originalVenue != notification.gig.venue) {
+                       changes.push("venue");
+                       originalValue.push(notification.originalVenue);
+                       newValues.push( notification.gig.venue);
+                   }
+                %>
+                    <li>
+                        <%= notification.gig.artist.name %> has changed the <%= changes.join(' and ') %> of the gig at <%= originalValue.join('/') %> to <%= newValues.join('/') %>
+                    </li>
+                <%
+                }
             })
         %>
-    </script>
+    
+</script>
     <script>
         $(document).ready(function () {
             $.getJSON("/api/notifications",
