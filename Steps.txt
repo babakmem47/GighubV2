@@ -2012,7 +2012,8 @@ namespace GighubV2.App_Start
                    }
                 %>
                     <li>
-                        <%= notification.gig.artist.name %> has changed the <%= changes.join(' and ') %> of the gig at <%= originalValue.join('/') %> to <%= newValues.join('/') %>
+                        <%= notification.gig.artist.name %> has changed the <%= changes.join(' and ') %> 
+						of the gig at <%= originalValue.join('/') %> to <%= newValues.join('/') %>
                     </li>
                 <%
                 }
@@ -2034,13 +2035,56 @@ namespace GighubV2.App_Start
 80. Solve an edge case: displaying zero in a badge and the user see an empty popover
 
 
+///////////////////////////////////// 08. Improving the Look and Feel ////////////////////////////////////////
+///////// 01. Improving the Look and Feel of Popover ///////////
+/// Get rid of bullets and padding on the left:
+/// Give <ul> in template a class name 'notifications':
+			<ul class="notifications">
 
+/// in Site.css add below css:
+		.navbar-collapse .navbar-nav.navbar-right .popover-content .notifications {
+			list-style: none;
+		}
 
+/// But the notifications are too close to each other. 
+/// add a border below each notification and a bit of vertical padding
+			.navbar-collapse .navbar-nav.navbar-right .popover-content .notifications > li {
+				border-bottom: 1px solid #ddd;
+				padding: 10px 0;
+			}
 
+/// remove border from the last item:
+			.navbar-collapse .navbar-nav.navbar-right .popover-content .notifications > li:last-child {
+				border-bottom: none;
+			}
 
+////////////// 02.Overriding Popover Template  ////////////////
+/// Remove padding around notifications:
+/// Also we want these borders to be completely attach to the sides of the popover.
+/// the padding is coming from its parent: popover-content (the green area in Inspect)
+/// There are 2 ways:
+/// 1. My way:
+			.navbar-collapse .navbar-nav.navbar-right .popover-content {
+				padding: 0;
+			}
+/// 2. Mosh way:
+/// in getbootstrap.com -> copy template markup and add it to popover NOT WORK 
+/// Successfully attach borders to the sides of the popover but we need padding for each item
+/// Add padding: 10px; to .popover-content .notifications {}
 
-
-
+//////////////////// 03.Making Text Bold //////////////////////
+/// Make this artists name in notifications bold
+/// The poor way of making this bold is to to use the <strong> tag.
+/// The problem with this approach: what if in the future instead of making this bold, we want to
+/// change its color or make it italic or make the font bigger 
+/// A cleaner way is to wrap this text with a span and use a class like highlight
+	<span class="highlight"><%= notification.gig.artist.name %></span>
+	
+/// Also we must add below css to Site.css:	
+	.navbar-collapse .navbar-nav.navbar-right .popover-content .notifications > li .highlight {
+        font-weight: bold;
+    }	
+81. Get rid of bullets, attach borders to the sides, proper padding, Making artist name Bold.
 
 
 
