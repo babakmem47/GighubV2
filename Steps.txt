@@ -2019,5 +2019,38 @@ namespace GighubV2.App_Start
 				
 79. Show Gig Updated Notification in Popover
 
+//////////////// 09. Handling Edge Cases //////////////////////
+/// Here we have an edge case: What if the notifications array that we get from the server is empty?
+/// Problem: displaying zero in a badge and the user see an empty popover, which doesn't make sense
+/// we should display the badge and the popover only if we have at least one new notification.
+
+////////////////////// 10. Summary ////////////////////////////
+/// Badges are pretty useful when you want to display the number of new things to the user
+/// like new tasks, new orders, new notifications, and so on.
+/// We can render content on the client instead of server.
+/// benefit : Increase the scalability of your applications,
+/// because server resources are no longer used for rendering views for potentially millions of users.
+
+80. Solve an edge case: displaying zero in a badge and the user see an empty popover
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
