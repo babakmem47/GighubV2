@@ -2109,7 +2109,7 @@ namespace GighubV2.App_Start
 82. Formatting Dates using moment.js and Remove Shadow from Popover
 
 //////////////////// 06.Consolidating Bundles /////////////////
-/// in BundleConfig.cs we have 4 bundles.
+/// in BundleConfig.cs we have 4 bundles by default: jquery jqueryval Modernizr and bootstrap
 /// jquery and bootstrap are always together
 /// in _Layout.cshmtl we have these:
 									@Scripts.Render("~/bundles/jquery")
@@ -2143,4 +2143,34 @@ namespace GighubV2.App_Start
 /// Modernizr is a different story: It has to be in the head section of the html.
 /// it cannot be part of the lib bundle: in _Layout: Modernizr is in the head section.
 83. Consolidating Bundles
+
+////////////// 07.Using LESS to Write Cleaner CSS ////////////
+/// if you're working on big projects, writing and maintaining CSS the way we have done so far
+/// can be a little bit time consuming and frustrating
+/// LESS: the better way to write CSS
+/// LESS is a dynamic style sheet language that gets compiled into CSS
+/// with LESS you write less code
+/// Close Site.css if it's open -> Solution Explorer -> rename Site.css to site.less
+/// It will be much cleaner if we could write all these styles in a hierarchical way
+/// with LESS we can write nested styles but we can't do that with CSS!
+/// the LESS preprocessor comes with Web Essentials plugin 
+/// LESS preprocessor compile this LESS code on the left and generate the CSS on the right side.
+/// This way I can immediately see the hierarchy of styles.
+/// The code is cleaner and more meaningful.
+84. Using LESS to clean css code.
+
+////////////// 08.Converting Existing CSS to LESS /////////////
+/// if you are working on a project with a lot of legacy CSS, it's very time consuming to manually convert
+/// all that CSS to LESS.
+/// Use online converters: css2less.co
+85. Use Online Convertor to Convert CSS to LESS
+
+
+
+
+
+
+
+
+
 
