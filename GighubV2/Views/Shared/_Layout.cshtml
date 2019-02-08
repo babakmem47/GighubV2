@@ -96,7 +96,10 @@
                             return html;
                         },
                         placement: "bottom"
-                    });
+                    }).on('shown.bs.popover',
+                        function () {
+                            console.log('popover shown');
+                        });
 
                 });
         });

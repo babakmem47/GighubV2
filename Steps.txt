@@ -2166,11 +2166,20 @@ namespace GighubV2.App_Start
 85. Use Online Convertor to Convert CSS to LESS
 
 
-
-
-
-
-
-
-
+/////////////////////////////////////// 9.Handling Bootstrap Events /////////////////////////////////////
+/////////////// 01. Handling Popover Events ////////////////////
+/// When we click this notification popover, we want to hide the number of new notifications
+/// We need to handle events raised from BootStrap components
+/// we need to call an API and mark these notifications as read
+/// we need to handle the shown event raised by popover
+/// this event is shown.bs.popover is fired when the popover is made visible to the user.
+/// Right after calling the popover method, we can call the 'on' method
+/// Test to see if plumbing is working:
+					$(".globeIcon").popover({
+                        [...]
+                    }).on('shown.bs.popover',
+                        function () {
+                            console.log('popover shown');
+                        });
+86. Testing Popover Shown Event for hiding the number of new notifications after seen by user
 
