@@ -7,3 +7,4 @@
 /// <reference path="respond.js" />
 /// <reference path="bootbox.min.js" />
 /// <reference path="underscore-min.js" />
+/// <reference path="moment-with-locales.min.js" />

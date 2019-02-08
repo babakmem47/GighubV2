@@ -2086,11 +2086,27 @@ namespace GighubV2.App_Start
     }	
 81. Get rid of bullets, attach borders to the sides, proper padding, Making artist name Bold.
 
+///////////////// 04.Formatting Dates using moment.js //////////
+/// We don't want to display a date like this. This is for machines not for humans!
+/// We need to parse this text as a date/time object and reformat it in a more readable way.
+/// Go to www.momentjs.com -> download moment-with-locales.min -> Add Existing Item to Scripts folder
+/// in BundleConfig add this to jquery(for now):
+			"~/Scripts/moment-with-locales.min.js"));
 
+/// change notification.gig.dateTime -> moment(notification.gig.dateTime).format("D MMM HH:mm")
+/// change the if block if(notification.originalDateTime != notification.gig.dateTime) :
+/// replace notification.originalDateTime with moment(notification.originalDateTime).format("D MMM HH:mm")
+/// replace notification.gig.dateTime with moment(notification.gig.dateTime).format("D MMM HH:mm")
 
-
-
-
+//////////// 05. Final Touch: Remove Shadow from Popover///////
+/// We don't use shadows or gradients in flat design
+/// Inspect -> look for class 'popover' -> untick box-shadow and -webkit-box-shadow
+/// In Site.css:
+			.popover {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+82. Formatting Dates using moment.js and Remove Shadow from Popover
 
 
 
