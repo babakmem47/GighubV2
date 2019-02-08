@@ -2108,9 +2108,39 @@ namespace GighubV2.App_Start
 			}
 82. Formatting Dates using moment.js and Remove Shadow from Popover
 
+//////////////////// 06.Consolidating Bundles /////////////////
+/// in BundleConfig.cs we have 4 bundles.
+/// jquery and bootstrap are always together
+/// in _Layout.cshmtl we have these:
+									@Scripts.Render("~/bundles/jquery")
+									@Scripts.Render("~/bundles/bootstrap")
+/// this means we're going to have two separate http requests to the server to get these bundles.
+/// We are going to consolidate this into one single bundle called lib(short for library)
+/// in the future we can extract all these little pieces of JavaScript we have written all over the place
+/// into separate JavaScript files and put them in a bundle called app
+/// So our application will have two bundles: 
+/// 1. lib: third party external libraries 
+/// 2. app: the code specific for this application
 
+/// Consolidating Bundles:
+/// 1. in _Layout.cshmtl: replace above 2 lines with this:
+									@Scripts.Render("~/bundles/lib")
+									
+/// 2. in BundleConfig: change first bundle from ~/bundles/jquery to ~/bundles/lib
+									bundles.Add(new ScriptBundle("~/bundles/lib").Include(...
+/// 3. cut all bootstrap js bundle from third bundle and paste it under our new lib bundle:
+			bundles.Add(new ScriptBundle("~/bundles/lib").Include(
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/underscore-min.js",
+                        "~/Scripts/moment-with-locales.min.js",
+                        "~/Scripts/bootstrap.js",
+                        "~/Scripts/bootbox.min.js",
+                        "~/Scripts/respond.js"));
+/// 4. get rid of bootstrap bundle and remove it.
 
-
-
-
+/// but it should not include underscore.js and moment.js which is not right.
+/// what about jqueryval? we don't need it on every page. only on pages where we have a form
+/// Modernizr is a different story: It has to be in the head section of the html.
+/// it cannot be part of the lib bundle: in _Layout: Modernizr is in the head section.
+83. Consolidating Bundles
 
