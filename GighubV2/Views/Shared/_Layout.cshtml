@@ -98,7 +98,12 @@
                         placement: "bottom"
                     }).on('shown.bs.popover',
                         function () {
-                            console.log('popover shown');
+                            $.post("/api/notifications/markAsRead")
+                                .done(function() {
+                                    $(".js-noticications-count")
+                                        .text("")
+                                        .addClass("hide");
+                                });
                         });
 
                 });

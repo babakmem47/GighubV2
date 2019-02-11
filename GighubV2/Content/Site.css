@@ -137,11 +137,14 @@ h6,
   padding: 20px 15px;
   -ms-border-radius: 9px;
   border-radius: 9px;
+  border-color: none;
 }
 .form-control:focus {
   border-color: #2196f3;
   box-shadow: none;
   -webkit-box-shadow: none;
+  transition: none;
+  -webkit-transition: none;
 }
 select.form-control {
   padding: 0 15px;
@@ -211,5 +214,8 @@ select.form-control {
 }
 .btn-sm {
   line-height: 1;
+}
+#searchGigs {
+  width: 300px;
 }
 /*# sourceMappingURL=site.css.map */

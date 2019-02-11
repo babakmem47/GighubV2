@@ -2183,3 +2183,178 @@ namespace GighubV2.App_Start
                         });
 86. Testing Popover Shown Event for hiding the number of new notifications after seen by user
 
+/////////////// 03. build an API to mark Shown Notifications As Read ////////////////////
+/// We have to use either HttpPost or HttpPut
+/// using HttpPost instead of HttpPut because from a restful API design point of view, this 
+/// action has a semantic of a new request. It's like I'm sending a new request to the server
+/// So in NotificationsController:
+		[HttpPost]
+        public IHttpActionResult MarkAsRead()
+        {
+            var currentUserId = User.Identity.GetUserId();
+            var notifications = _context.UserNotifications
+                .Where(un => un.UserId == currentUserId && !un.IsRead)
+                .ToList();
+
+            notifications.ForEach(n => n.Read());
+
+            _context.SaveChanges();
+
+            return Ok("successfully mark " + notifications.Count + " unread notifications for current user as read");
+        }
+/// We need to implement Read method in UserNotification.cs:
+		public void Read()
+        {
+            IsRead = true;
+        }
+/// And make IsRead prop setter private:
+		public bool IsRead { get; private set; }
+
+/////////////// 04. Consuming the API to mark Shown Notifications As Read ///////////////
+/// API is ready. We need to call it.
+/// So when the popover appears, we need to call this API using jquery
+/// My implementation:
+					}).on('shown.bs.popover',
+                        function () {
+							$.post("/api/notifications",
+                                function(data, status) {
+                                    console.log("Data: " + data + "  Status: " + status);
+                                    $(".js-noticications-count")
+                                        .text("")
+                                        .removeClass("animated bounceInDown")
+                                        .addClass("hide");
+                                });
+                        });
+///
+/// data: message "successfully mark ..."
+/// status: success	
+	
+/// Mosh implementation:
+					}).on('shown.bs.popover',
+                        function () {
+                            $.post("/api/notifications/markAsRead")
+                                .done(function() {
+                                    $(".js-noticications-count")
+                                        .text("")
+                                        .addClass("hide");
+                                });
+
+                        });
+///
+/// Note: we can add 'markAsRead' at the end of url or not! both are working fine in post
+
+/////////////// 05. Discussion: When we don't have notifications ////////////////////////
+/// Our implementation is assuming that we should display the badge and the popover only if 
+/// there are new notifications But I don't think that's the right assumption.
+/// Facebook when you click this icon even if you don't have any new notifications, you'll 
+/// still see the popover
+/// A better implementation: you'll see the most recent notifications.
+/// A better implementation would be to return a different object that has two properties
+/// One is the count of new notifications and the other is the most recent notifications
+/// leave as an exercise
+
+
+/////////////////////////////////////// 10. Implementing Searching //////////////////////////////////////
+/////////////// 01. Adding the Search Form /////////////////////
+/// We want to add a search form above the list of gigs
+/// We implement search in HomeController -> Index action
+/// Gigs.cshmtl -> add search form above the list of gigs after <h1>@Model.Heading</h1>:
+	@using (Html.BeginForm("Search", "Gigs"))
+	{
+		<div class="form-group">
+			@Html.TextBoxFor(m => m.SearchTerm, new { @class="form-control" })
+		</div>
+		<input type="submit" value="Search"/>
+	}
+/// Create SearchTerm prop type string in GigsViewModel
+
+/////////////// 02. Using Bootstrap Input Groups ///////////////
+/// Change Search button: make it attach to input and 
+/// Bootstrap Input Group make it possible for us
+/// Change it like below:
+		<div class="form-group">
+			<div id="searchGigs" class="input-group">
+				@Html.TextBoxFor(m => m.SearchTerm, new {@class = "form-control"})
+				<span class="input-group-addon">
+					<i class="glyphicon glyphicon-search"></i>
+				</span>
+			</div>
+		</div>
+/// add below code to site.less:
+								#searchGigs {
+									width: 300px;
+								}
+/// 
+/////////////// 03.Implementing Bookmarkable Pages /////////////
+/// One way to implement this is, in the search action, we filter the gigs based on the search query here,
+/// put them in the view, and return the view. Just like how we have implemented other actions until now.
+/// Problem with this approach: the results will not be bookmarkable.
+/// Case: a user search for Blues gigs and after that, wants to bookmark this page search result
+/// He/She wants to see only upcoming 'blues' gigs.
+/// Problem: our app not add searched query in the url: localhost:31156?query=blues
+/// We need to use query string
+/// if we have this in our url, if users add this to their favorites and come back to it later, 
+/// we have the query string, the index action is called, it uses this parameter and filters 
+/// the gigs to only return Blues gigs.
+/// Implement bookmarkable search:
+/// 1. GigsController add below action:
+		[HttpPost]
+        public ActionResult Search(GigsViewModel viewModel)
+        {
+            return RedirectToAction("Index", "Home", new { query = viewModel.SearchTerm });
+        }
+/// PARAMETER is GigsViewModel because in our gigs view, where we rendered the form, this is the view model 
+/// that we had there
+/// instead of looking up the list of gigs by the search parameter, we redirect to the index action of 
+/// the Home controller 
+/// In the third parameter we pass an anonymous object. what we add here will end up as a query string.
+
+/// 2. Home Controller:
+/// Add a parameter : public ActionResult Index(string query = null)   /// to set this to null if nothing pass
+/// set this parameter to null by default so we don't want this to be a required parameter
+/// Add this after get all upcoming gigs:
+			if (!String.IsNullOrWhiteSpace(query))
+            {
+                upcomingGigs = upcomingGigs
+                    .Where(g => g.Artist.Name.Contains(query) ||
+                                g.Genre.Name.Contains(query) ||
+                                g.Venue.Contains(query));
+            }
+/// little problem: our search term is not appearing in the textbox
+/// Solution: in the Index action, as we're initializing the view model, we need to set the search term:
+	SearchTerm = query
+	
+/// With this, when the Gigs view is rendered, our search textbox will be auto-populated with the value of query
+/// Why? in Gigs.cshtml we have TextBoxFor(m => m.SearchTerm...  
+/// So if our view model is initialized properly, this textbox will be auto-populated.
+
+/////////////////// 04. Excercise & 05. Code Review ////////////////////////
+////////// Add the Watermark to Search TextBox 
+/// Add placeholder attribute to the line below:
+            @Html.TextBoxFor(m => m.SearchTerm, new {@class = "form-control", placeholder="Search by artist, genre..."})
+///
+////////// Remove the shadow and transition effect around the border
+.form-control {
+    font-size: 17px;
+    padding: 20px 15px;
+    -ms-border-radius: 9px;
+    border-radius: 9px;
+    border-color: none;					/// make it gray when is not focus
+    &:focus {
+        border-color: #2196f3;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        transition: none;				/// remove transition effect
+        -webkit-transition: none;		/// remove transition effect
+    }   
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// End Of Advanced Topics //////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
